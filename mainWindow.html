@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Mob timer</title>
+  </head>
+  <body>
+    <h1>Mob timer</h1>
+    <section>
+      <h2>Get started</h2>
+      <div id="timer" style="font-size: 100px">00:00</div>
+      <div style="font-size: 30px">
+        Driver: <span id="driver"></span>
+      </div>
+      <div style="font-size: 30px">
+        Navigator: <span id="navigator"></span>
+      </div>
+      <button type="button" id="run" onclick="run()" style="font-size: 20px">Go!</button>
+      <button type="button" onclick="skipDriver()" style="font-size: 20px">Skip driver</button>
+      <button type="button" onclick="skipNavigator()" style="font-size: 20px">Skip navigator</button>
+    </section>
+    <section>
+      <h2>Duration</h2>
+      <input type="text" readonly id="duration" value="7">
+      <button type="button" id="shorterDuration">-</button>
+      <button type="button" id="longerDuration">+</button>
+    </section>
+    <section>
+      <h2>Drivers</h2>
+      <textarea
+        id="drivers"
+        placeholder="Write a drivers name on each line"
+        rows="6"
+        cols="40">
+      </textarea>
+    </section>
+    <section>
+      <h2>Navigators</h2>
+      <textarea
+        id="navigators"
+        placeholder="Write a navigators name on each line"
+        rows="6"
+        cols="40">
+      </textarea>
+    </section>
+    <script type="text/javascript">
+      const { ipcRenderer } = require('electron');
+
+      const duration = require('./duration');
+      const roles = require('./roles');
+      const timer = require('./timer');
+
+      duration.init();
+
+      function run() {
+        roles.initOnce();
+        timer.run({
+          duration: duration.getDuration(),
+          callback: function() {
+            roles.next();
+            ipcRenderer.send('time-has-elapsed', {});
+          }
+        });
+        ipcRenderer.send('timer-started', {});
+      }
+
+      function skipDriver() {
+        roles.nextDriver();
+      }
+
+      function skipNavigator() {
+        roles.nextNavigator();
+      }
+    </script>
+  </body>
+</html>
