@@ -1,8 +1,11 @@
 const electron = require('electron');
+const electronReload = require('electron-reload');
 const url = require('url');
 const path = require('path');
 
 const { app, BrowserWindow, ipcMain } = electron;
+
+electronReload(__dirname);
 
 let mainWindow;
 
