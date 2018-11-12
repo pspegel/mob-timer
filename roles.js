@@ -7,14 +7,12 @@ module.exports = (function() {
   let currentDriver = null;
   let currentNavigator = null;
 
+  drivers = document.getElementById('drivers');
+  navigators = document.getElementById('navigators');
+  driver = document.getElementById('driver');
+  navigator = document.getElementById('navigator');
+
   pub.initOnce = function() {
-    if (drivers !== undefined) {
-      return;
-    }
-    drivers = document.getElementById('drivers');
-    navigators = document.getElementById('navigators');
-    driver = document.getElementById('driver');
-    navigator = document.getElementById('navigator');
     roles.nextDriver();
     roles.nextNavigator();
   }
@@ -46,6 +44,10 @@ module.exports = (function() {
     pub.nextDriver();
     pub.nextNavigator();
   };
+
+  pub.copyToNavigators = function() {
+    navigators.value = drivers.value;
+  }
 
   function nextDriver() {
     const next = nextFromList(getDrivers(), currentDriver);

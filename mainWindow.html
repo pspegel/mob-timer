@@ -74,8 +74,7 @@
             rows="6"
             cols="40"></textarea>
           </div>
-        </section>
-      
+        </section>      
     </div>
     <script type="text/javascript">
       const { ipcRenderer } = require('electron');
@@ -106,9 +105,11 @@
         roles.nextNavigator();
       }
 
+            
       function copyToNavigators() {
-        
+        roles.copyToNavigators();        
       }
+
     </script>
   </body>
 </html>
