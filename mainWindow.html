@@ -63,7 +63,7 @@
           <div style="font-size: 30px">
             Navigator: <span id="navigator"></span>
           </div>
-          <button type="button" id="run" onclick="run()" style="font-size: 20px">Go!</button>
+          <button type="button" id="run" onclick="run()" disabled style="font-size: 20px">Go!</button>
           <button type="button" onclick="skipDriver()" style="font-size: 20px">Skip driver</button>
           <button type="button" onclick="skipNavigator()" style="font-size: 20px">Skip navigator</button>
 
@@ -104,7 +104,8 @@
       const roles = require('./roles');
       const timer = require('./timer');
 
-      duration.init();
+      duration.init(formChanged);
+      roles.init(formChanged);
 
       function run() {
         const timesUp = document.getElementById('timesup');
@@ -137,6 +138,16 @@
             }
             document.getElementById('run').focus();
           }, 300)
+        }
+      }
+
+      function formChanged() {
+        const goButton = document.getElementById('run');
+        
+        if (roles.isValid() && duration.isValid()) {
+          goButton.disabled = false;
+        } else {
+          goButton.disabled = true;
         }
       }
 

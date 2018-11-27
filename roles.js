@@ -6,11 +6,18 @@ module.exports = (function() {
   let navigator;
   let currentDriver = null;
   let currentNavigator = null;
+  let changeCallback;
 
   drivers = document.getElementById('drivers');
   navigators = document.getElementById('navigators');
   driver = document.getElementById('driver');
   navigator = document.getElementById('navigator');
+
+  pub.init = function(callback) {
+    changeCallback = callback;
+    drivers.onkeyup = changeCallback;
+    navigators.onkeyup = changeCallback;
+  }
 
   pub.initOnce = function() {
     roles.nextDriver();
@@ -47,6 +54,11 @@ module.exports = (function() {
 
   pub.copyToNavigators = function() {
     navigators.value = drivers.value;
+    changeCallback();
+  }
+
+  pub.isValid = function() {
+    return drivers.value.length > 0 && navigators.value.length > 0;
   }
 
   function nextDriver() {
