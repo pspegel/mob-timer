@@ -5,6 +5,8 @@ const path = require('path');
 
 const { app, BrowserWindow, ipcMain } = electron;
 
+let extraWindows = [];
+
 electronReload(__dirname);
 
 let mainWindow;
@@ -12,6 +14,8 @@ let mainWindow;
 ipcMain.on('time-has-elapsed', (event, arg) => {
   mainWindow.show();
   mainWindow.maximize();
+
+  blockExternalDisplays();
 });
 
 ipcMain.on('timer-started', (event, arg) => {
@@ -19,11 +23,27 @@ ipcMain.on('timer-started', (event, arg) => {
     if (mainWindow.isVisible()) {
       mainWindow.minimize();
     }
+
+    for (let i in extraWindows) {
+      try {
+        if (extraWindows[i] && extraWindows[i].isVisible()) {
+          extraWindows[i].close();
+        }
+      } catch (e) {
+        // ignore.
+      }
+    }
+    extraWindows = [];
   }, 3000);
 });
 
 app.on('ready', function() {
-  mainWindow = new BrowserWindow({});
+  mainWindow = new BrowserWindow({icon: path.join(__dirname, '/favicon.ico')});
+
+  mainWindow.on('close', function() {
+    app.quit();
+  });
+
   mainWindow.loadURL(url.format({
     pathname: path.join(__dirname, 'mainWindow.html'),
     protocol: 'file:',
@@ -31,4 +51,29 @@ app.on('ready', function() {
   }));
   mainWindow.maximize();
 });
+
+function blockExternalDisplays() {
+  extraWindows = [];
+  const displays = electron.screen.getAllDisplays();
+  const primaryDisplayId = electron.screen.getPrimaryDisplay().id
+  for (const i in displays) {
+    if (displays[i].id === primaryDisplayId) {
+      continue;
+    }
+
+    const externalDisplay = displays[i];
+    const extraWindow = new BrowserWindow({
+      x: externalDisplay.bounds.x + 50,
+      y: externalDisplay.bounds.y + 50
+    });
+    
+    extraWindow.loadURL(url.format({
+      pathname: path.join(__dirname, 'extraWindow.html'),
+      protocol: 'file:',
+      slashes: true
+    }));
+    extraWindow.maximize();
+    extraWindows.push(extraWindow);
+  }
+}
 
