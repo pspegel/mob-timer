@@ -4,21 +4,57 @@
     <title>Mob timer</title>
     <style>
       body, html {
-        height: 100vh;
+        height: auto;
         margin: 0;
         padding: 0;
+        min-height: 100vh;
       }
 
       body {
-        /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#180c35+0,323448+100 */
-        background: #180c35; /* Old browsers */
-        background: -moz-linear-gradient(top, #180c35 0%, #323448 100%); /* FF3.6-15 */
-        background: -webkit-linear-gradient(top, #180c35 0%,#323448 100%); /* Chrome10-25,Safari5.1-6 */
-        background: linear-gradient(to bottom, #180c35 0%,#323448 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-        filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#180c35', endColorstr='#323448',GradientType=0 ); /* IE6-9 */
+        background: #3b4258; /* Old browsers */
+        background: -moz-linear-gradient(top, #3b4258 0%, #222837 100%); /* FF3.6-15 */
+        background: -webkit-linear-gradient(top, #3b4258 0%,#222837 100%); /* Chrome10-25,Safari5.1-6 */
+        background: linear-gradient(to bottom, #3b4258 0%,#222837 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+        filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#3b4258', endColorstr='#222837',GradientType=0 ); /* IE6-9 */
         color: #fff;
         font-family: Arial, sans-serif;
         text-align: center;
+      }
+
+      h1 {
+        font-size: 42px;
+        text-transform: uppercase;
+        font-weight: 400;
+      }
+
+      button {
+        font-size: 18px;
+        border: none;
+        background: #616375;
+        color: #fff;
+        padding: 10px 30px;
+        border-radius: 5px;
+        font-weight: bold;
+      }
+
+      input, textarea {
+        background: #fff;
+        border: none;
+        border-radius: 5px;
+        padding: 14px 20px;
+        vertical-align: top;
+      }
+
+      textarea {
+        margin-bottom: 20px;
+        width: 100%;
+        box-sizing: border-box;
+      }
+
+      #run {
+        width: 100%;
+        background: #ff5e63;
+        box-sizing: border-box;
       }
 
       .content {
@@ -29,6 +65,24 @@
 
       .inner-wrap {
         text-align: left;
+      }
+
+      .button-wrap {
+        margin: 20px 0;
+        text-align: center;
+      }
+
+      .button-wrap button {
+        margin-bottom: 20px;
+      }
+
+      #timer {
+        box-shadow: inset 0px 0px 21px 0px rgba(0,0,0,0.3);
+        border-radius: 10px;
+        font-size: 100px;
+        padding: 10px;
+        margin-bottom: 30px;
+        border: 1px solid rgba(117, 117, 117, 0.1);
       }
 
       #timesup {
@@ -45,6 +99,18 @@
         padding-top: 45vh;
         display: block;
       }
+
+      .name-wrap {
+        font-size: 25px;
+        color: #ccc;
+        text-align: center;
+        text-transform: capitalize;
+      }
+
+      #driver, #navigator {
+        font-size: 35px;
+        color: #fff;
+      }
     </style>
   </head>
   <body>
@@ -54,19 +120,19 @@
     <div class="content">
       <h1>Mob timer</h1>
         <section>
-        <h2>Get started</h2>
-        <div id="timer" style="font-size: 100px">00:00</div>
+        <div id="timer">00:00</div>
         <div class="inner-wrap">
-          <div style="font-size: 30px">
+          <div class="name-wrap">
             Driver: <span id="driver"></span>
           </div>
-          <div style="font-size: 30px">
+          <div class="name-wrap">
             Navigator: <span id="navigator"></span>
           </div>
-          <button type="button" id="run" onclick="run()" disabled style="font-size: 20px">Go!</button>
-          <button type="button" onclick="skipDriver()" style="font-size: 20px">Skip driver</button>
-          <button type="button" onclick="skipNavigator()" style="font-size: 20px">Skip navigator</button>
-
+          <div class="button-wrap">
+            <button type="button" id="run" onclick="run()" disabled>Go!</button>
+            <button type="button" onclick="skipDriver()">Skip driver</button>
+            <button type="button" onclick="skipNavigator()">Skip navigator</button>
+          </div>
           <h2>Duration</h2>
           <input type="text" id="duration" value="7">
           <button type="button" id="shorterDuration">-</button>
