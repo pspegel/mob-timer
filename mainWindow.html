@@ -193,6 +193,7 @@
       function run() {
         const timesUp = document.getElementById("timesup");
         const buttons = document.getElementsByTagName("button");
+        document.getElementById("run").disabled = true;
 
         roles.initOnce();
         timer.run({
