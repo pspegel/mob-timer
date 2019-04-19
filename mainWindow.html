@@ -3,7 +3,8 @@
   <head>
     <title>Mob timer</title>
     <style>
-      body, html {
+      body,
+      html {
         height: auto;
         margin: 0;
         padding: 0;
@@ -12,9 +13,21 @@
 
       body {
         background: #3b4258; /* Old browsers */
-        background: -moz-linear-gradient(top, #3b4258 0%, #222837 100%); /* FF3.6-15 */
-        background: -webkit-linear-gradient(top, #3b4258 0%,#222837 100%); /* Chrome10-25,Safari5.1-6 */
-        background: linear-gradient(to bottom, #3b4258 0%,#222837 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+        background: -moz-linear-gradient(
+          top,
+          #3b4258 0%,
+          #222837 100%
+        ); /* FF3.6-15 */
+        background: -webkit-linear-gradient(
+          top,
+          #3b4258 0%,
+          #222837 100%
+        ); /* Chrome10-25,Safari5.1-6 */
+        background: linear-gradient(
+          to bottom,
+          #3b4258 0%,
+          #222837 100%
+        ); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
         filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#3b4258', endColorstr='#222837',GradientType=0 ); /* IE6-9 */
         color: #fff;
         font-family: Arial, sans-serif;
@@ -37,7 +50,8 @@
         font-weight: bold;
       }
 
-      input, textarea {
+      input,
+      textarea {
         background: #fff;
         border: none;
         border-radius: 5px;
@@ -77,7 +91,7 @@
       }
 
       #timer {
-        box-shadow: inset 0px 0px 21px 0px rgba(0,0,0,0.3);
+        box-shadow: inset 0px 0px 21px 0px rgba(0, 0, 0, 0.3);
         border-radius: 10px;
         font-size: 100px;
         padding: 10px;
@@ -89,7 +103,7 @@
         display: none;
         width: 100%;
         height: 100vh;
-        background: rgba(0,0,0,0.7);
+        background: rgba(0, 0, 0, 0.7);
         position: absolute;
         top: 0;
         transition: opacity 0.3s ease-out;
@@ -107,7 +121,8 @@
         text-transform: capitalize;
       }
 
-      #driver, #navigator {
+      #driver,
+      #navigator {
         font-size: 35px;
         color: #fff;
       }
@@ -119,97 +134,102 @@
     </div>
     <div class="content">
       <h1>Mob timer</h1>
-        <section>
+      <section>
         <div id="timer">00:00</div>
         <div class="inner-wrap">
-          <div class="name-wrap">
-            Driver: <span id="driver"></span>
-          </div>
-          <div class="name-wrap">
-            Navigator: <span id="navigator"></span>
-          </div>
+          <div class="name-wrap">Driver: <span id="driver"></span></div>
+          <div class="name-wrap">Navigator: <span id="navigator"></span></div>
           <div class="button-wrap">
             <button type="button" id="run" onclick="run()" disabled>Go!</button>
             <button type="button" onclick="skipDriver()">Skip driver</button>
-            <button type="button" onclick="skipNavigator()">Skip navigator</button>
+            <button type="button" onclick="skipNavigator()">
+              Skip navigator
+            </button>
           </div>
           <h2>Duration</h2>
-          <input type="text" id="duration" value="7">
+          <input type="text" id="duration" value="7" />
           <button type="button" id="shorterDuration">-</button>
           <button type="button" id="longerDuration">+</button>
         </div>
-        </section>
-        <section>
-          <div class="inner-wrap">
-            <h2>Drivers</h2>
-            <textarea 
-              id="drivers"
-              placeholder="Write a drivers name on each line"
-              rows="6"
-              cols="40"></textarea>  
-          </div>      
-        </section>
-        <section>
-          <button type="button" onclick="copyToNavigators()">Copy drivers to navigators</button>
-        </section>
-        <section>
-          <div class="inner-wrap">
+      </section>
+      <section>
+        <div class="inner-wrap">
+          <h2>Drivers</h2>
+          <textarea
+            id="drivers"
+            placeholder="Write a drivers name on each line"
+            rows="6"
+            cols="40"
+          ></textarea>
+        </div>
+      </section>
+      <section>
+        <button type="button" onclick="copyToNavigators()">
+          Copy drivers to navigators
+        </button>
+      </section>
+      <section>
+        <div class="inner-wrap">
           <h2>Navigators</h2>
           <textarea
             id="navigators"
             placeholder="Write a navigators name on each line"
             rows="6"
-            cols="40"></textarea>
-          </div>
-        </section>      
+            cols="40"
+          ></textarea>
+        </div>
+      </section>
     </div>
     <script type="text/javascript">
-      const { ipcRenderer } = require('electron');
+      const { ipcRenderer } = require("electron");
 
-      const duration = require('./duration');
-      const roles = require('./roles');
-      const timer = require('./timer');
+      const duration = require("./duration");
+      const roles = require("./roles");
+      const timer = require("./timer");
 
       duration.init(formChanged);
       roles.init(formChanged);
 
       function run() {
-        const timesUp = document.getElementById('timesup');
-        const buttons = document.getElementsByTagName('button');
+        const timesUp = document.getElementById("timesup");
+        const buttons = document.getElementsByTagName("button");
 
         roles.initOnce();
         timer.run({
           duration: duration.getDuration(),
           callback: function() {
             roles.next();
-            timesUp.style.display = 'block';
-            timesUp.style.opacity = '1';
+            timesUp.style.display = "block";
+            timesUp.style.opacity = "1";
             for (let i = 0; i < buttons.length; i++) {
               buttons[i].disabled = true;
             }
-            
-            ipcRenderer.send('time-has-elapsed', {});            
-            timesUp.removeEventListener('click', closeTimesUp);
-            timesUp.addEventListener('click', closeTimesUp);              
+            document.body.style.overflow = "hidden";
+            window.scrollTo(0, 0);
+
+            ipcRenderer.send("time-has-elapsed", {});
+            timesUp.removeEventListener("click", closeTimesUp);
+            timesUp.addEventListener("click", closeTimesUp);
           }
         });
-        ipcRenderer.send('timer-started', {});
+        ipcRenderer.send("timer-started", {});
 
         function closeTimesUp() {
-          timesUp.style.opacity = '0';
+          timesUp.style.opacity = "0";
           setTimeout(function() {
-            timesUp.style.display = 'none';
+            timesUp.style.display = "none";
             for (let i = 0; i < buttons.length; i++) {
               buttons[i].disabled = false;
             }
-            document.getElementById('run').focus();
-          }, 300)
+            document.body.style.overflow = "auto";
+            document.getElementById("run").focus();
+          }, 300);
         }
       }
 
       function formChanged() {
-        const goButton = document.getElementById('run');
-        
+        const goButton = document.getElementById("run");
+
         if (roles.isValid() && duration.isValid()) {
           goButton.disabled = false;
         } else {
@@ -225,11 +245,9 @@
         roles.nextNavigator();
       }
 
-            
       function copyToNavigators() {
-        roles.copyToNavigators();        
+        roles.copyToNavigators();
       }
-
     </script>
   </body>
 </html>
