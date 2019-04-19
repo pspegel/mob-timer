@@ -8,26 +8,26 @@ module.exports = (function() {
   let currentNavigator = null;
   let changeCallback;
 
-  drivers = document.getElementById('drivers');
-  navigators = document.getElementById('navigators');
-  driver = document.getElementById('driver');
-  navigator = document.getElementById('navigator');
+  drivers = document.getElementById("drivers");
+  navigators = document.getElementById("navigators");
+  driver = document.getElementById("driver");
+  navigator = document.getElementById("navigator");
 
   pub.init = function(callback) {
     changeCallback = callback;
     drivers.onkeyup = changeCallback;
     navigators.onkeyup = changeCallback;
-  }
+  };
 
   pub.initOnce = function() {
     roles.nextDriver();
     roles.nextNavigator();
-  }
+  };
 
   pub.next = function() {
     nextDriver();
     nextNavigator();
-  }
+  };
 
   pub.nextDriver = function() {
     let depth = 0;
@@ -55,11 +55,11 @@ module.exports = (function() {
   pub.copyToNavigators = function() {
     navigators.value = drivers.value;
     changeCallback();
-  }
+  };
 
   pub.isValid = function() {
     return drivers.value.length > 0 && navigators.value.length > 0;
-  }
+  };
 
   function nextDriver() {
     const next = nextFromList(getDrivers(), currentDriver);
@@ -71,7 +71,7 @@ module.exports = (function() {
     const next = nextFromList(getNavigators(), currentNavigator, currentDriver);
     currentNavigator = next || currentNavigator;
     update();
-  };
+  }
 
   function update() {
     driver.innerHTML = currentDriver;
@@ -80,11 +80,11 @@ module.exports = (function() {
 
   function getDrivers() {
     return getListFrom(drivers);
-  };
+  }
 
   function getNavigators() {
     return getListFrom(navigators);
-  };
+  }
 
   function nextFromList(list, current, skip) {
     if (!current) {
@@ -99,10 +99,10 @@ module.exports = (function() {
       return null;
     }
     if (skip && list[index] === skip) {
-      return pickIndexOrFollowing(list, index + 1, skip, depth++);
+      return pickIndexOrFollowing(list, index + 1, skip, depth + 1);
     }
     if (index >= list.length) {
-      return pickIndexOrFollowing(list, 0, skip, depth++);
+      return pickIndexOrFollowing(list, 0, skip, depth + 1);
     }
     return list[index];
   }
