@@ -2,65 +2,126 @@
 <html lang="en">
   <head>
     <title>Mob timer</title>
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; script-src 'nonce-bm9uY2U='"
+    />
+    <link rel="stylesheet" type="text/css" href="style.css" />
   </head>
   <body>
-    <h1>Mob timer</h1>
-    <section>
-      <h2>Get started</h2>
-      <div id="timer" style="font-size: 100px">00:00</div>
-      <div style="font-size: 30px">
-        Driver: <span id="driver"></span>
-      </div>
-      <div style="font-size: 30px">
-        Navigator: <span id="navigator"></span>
-      </div>
-      <button type="button" id="run" onclick="run()" style="font-size: 20px">Go!</button>
-      <button type="button" onclick="skipDriver()" style="font-size: 20px">Skip driver</button>
-      <button type="button" onclick="skipNavigator()" style="font-size: 20px">Skip navigator</button>
-    </section>
-    <section>
-      <h2>Duration</h2>
-      <input type="text" readonly id="duration" value="7">
-      <button type="button" id="shorterDuration">-</button>
-      <button type="button" id="longerDuration">+</button>
-    </section>
-    <section>
-      <h2>Drivers</h2>
-      <textarea
-        id="drivers"
-        placeholder="Write a drivers name on each line"
-        rows="6"
-        cols="40">
-      </textarea>
-    </section>
-    <section>
-      <h2>Navigators</h2>
-      <textarea
-        id="navigators"
-        placeholder="Write a navigators name on each line"
-        rows="6"
-        cols="40">
-      </textarea>
-    </section>
-    <script type="text/javascript">
-      const { ipcRenderer } = require('electron');
+    <div id="timesup">
+      <span>Time's up!</span>
+    </div>
+    <div class="content">
+      <h1>Mob timer</h1>
+      <section>
+        <div id="timer">00:00</div>
+        <div class="inner-wrap">
+          <div class="name-wrap">Driver: <span id="driver"></span></div>
+          <div class="name-wrap">Navigator: <span id="navigator"></span></div>
+          <div class="button-wrap">
+            <button type="button" id="run" disabled>Go!</button>
+            <button type="button" id="skipDriver">Skip driver</button>
+            <button type="button" id="skipNavigator">Skip navigator</button>
+          </div>
+          <h2>Duration</h2>
+          <input type="text" id="duration" value="7" />
+          <button type="button" id="shorterDuration">-</button>
+          <button type="button" id="longerDuration">+</button>
+        </div>
+      </section>
+      <section>
+        <div class="inner-wrap">
+          <h2>Drivers</h2>
+          <textarea
+            id="drivers"
+            placeholder="Write a drivers name on each line"
+            rows="6"
+            cols="40"
+          ></textarea>
+        </div>
+      </section>
+      <section>
+        <button type="button" id="copyToNavigators">
+          Copy drivers to navigators
+        </button>
+      </section>
+      <section>
+        <div class="inner-wrap">
+          <h2>Navigators</h2>
+          <textarea
+            id="navigators"
+            placeholder="Write a navigators name on each line"
+            rows="6"
+            cols="40"
+          ></textarea>
+        </div>
+      </section>
+    </div>
+    <script type="text/javascript" nonce="bm9uY2U=">
+      const { ipcRenderer } = require("electron");
 
-      const duration = require('./duration');
-      const roles = require('./roles');
-      const timer = require('./timer');
+      const goButton = document.getElementById("run");
+      const skipDriverButton = document.getElementById("skipDriver");
+      const skipNavigatorButton = document.getElementById("skipNavigator");
+      const copyToNavigatorsButton = document.getElementById(
+        "copyToNavigators"
+      );
+      const duration = require("./duration");
+      const roles = require("./roles");
+      const timer = require("./timer");
 
-      duration.init();
+      goButton.onclick = run;
+      skipDriverButton.onclick = skipDriver;
+      skipNavigatorButton.onclick = skipNavigator;
+      copyToNavigatorsButton.onclick = copyToNavigators;
+
+      duration.init(formChanged);
+      roles.init(formChanged);
 
       function run() {
-        roles.initOnce();
+        const timesUp = document.getElementById("timesup");
+        const buttons = document.getElementsByTagName("button");
+        goButton.disabled = true;
+
         timer.run({
           duration: duration.getDuration(),
           callback: function() {
             roles.next();
-            ipcRenderer.send('time-has-elapsed', {});
+            timesUp.style.display = "block";
+            timesUp.style.opacity = "1";
+            for (let i = 0; i < buttons.length; i++) {
+              buttons[i].disabled = true;
+            }
+            document.body.style.overflow = "hidden";
+            window.scrollTo(0, 0);
+
+            ipcRenderer.send("time-has-elapsed", {});
+            timesUp.removeEventListener("click", closeTimesUp);
+            timesUp.addEventListener("click", closeTimesUp);
           }
         });
-        ipcRenderer.send('timer-started', {});
+        ipcRenderer.send("timer-started", {});
+
+        function closeTimesUp() {
+          timesUp.style.opacity = "0";
+          setTimeout(function() {
+            timesUp.style.display = "none";
+            for (let i = 0; i < buttons.length; i++) {
+              buttons[i].disabled = false;
+            }
+            document.body.style.overflow = "auto";
+            document.getElementById("run").focus();
+          }, 300);
+        }
+      }
+
+      function formChanged() {
+        if (roles.isValid() && duration.isValid()) {
+          goButton.disabled = false;
+        } else {
+          goButton.disabled = true;
+        }
       }
 
       function skipDriver() {
@@ -69,6 +130,10 @@
 
       function skipNavigator() {
         roles.nextNavigator();
+      }
+
+      function copyToNavigators() {
+        roles.copyToNavigators();
       }
     </script>
   </body>

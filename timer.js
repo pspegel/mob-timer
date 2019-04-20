@@ -5,7 +5,7 @@ module.exports = (function() {
 
   pub.run = function(options) {
     const { duration, callback } = options;
-    let secondsLeft = duration * 60;
+    let secondsLeft = duration * 10;
 
     timer = document.getElementById('timer');
 
