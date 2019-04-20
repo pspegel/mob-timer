@@ -39,7 +39,10 @@ ipcMain.on("timer-started", (event, arg) => {
 
 app.on("ready", function() {
   mainWindow = new BrowserWindow({
-    icon: path.join(__dirname, "/favicon.ico")
+    icon: path.join(__dirname, "/favicon.ico"),
+    webPreferences: {
+      nodeIntegration: true
+    }
   });
 
   mainWindow.on("close", function() {
@@ -68,7 +71,10 @@ function blockExternalDisplays() {
     const externalDisplay = displays[i];
     const extraWindow = new BrowserWindow({
       x: externalDisplay.bounds.x + 50,
-      y: externalDisplay.bounds.y + 50
+      y: externalDisplay.bounds.y + 50,
+      webPreferences: {
+        nodeIntegration: false
+      }
     });
 
     extraWindow.loadURL(
