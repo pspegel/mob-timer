@@ -5,9 +5,9 @@ module.exports = (function() {
 
   pub.run = function(options) {
     const { duration, callback } = options;
-    let secondsLeft = duration * 10;
+    let secondsLeft = duration * 60;
 
-    timer = document.getElementById('timer');
+    timer = document.getElementById("timer");
 
     updateTimer(secondsLeft);
 
@@ -28,15 +28,15 @@ module.exports = (function() {
       return;
     }
     clearInterval(interval);
-  }
+  };
 
   function updateTimer(secondsLeft) {
     let minutes = Math.floor(secondsLeft / 60);
     let seconds = secondsLeft - minutes * 60;
-    minutes = minutes < 10 ? '0' + minutes : minutes;
-    seconds = seconds < 10 ? '0' + seconds : seconds;
+    minutes = minutes < 10 ? "0" + minutes : minutes;
+    seconds = seconds < 10 ? "0" + seconds : seconds;
 
-    timer.innerHTML = minutes + ':' + seconds;
+    timer.innerHTML = minutes + ":" + seconds;
   }
 
   return pub;
