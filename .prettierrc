@@ -3,7 +3,9 @@
     {
       "files": [".prettierrc", ".babelrc", ".stylelintrc"],
       "options": {
-        "parser": "json"
+        "parser": "json",
+        "printWidth": 120,
+        "arrowParens": "always"
       }
     }
   ],
