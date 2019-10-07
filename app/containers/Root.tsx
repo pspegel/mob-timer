@@ -1,24 +1,24 @@
-import * as React from 'react';
-import { Component } from 'react';
+import React from 'react';
 import { Provider } from 'react-redux';
 import { ConnectedRouter } from 'connected-react-router';
-import Routes from '../Routes';
 import { History } from 'history';
+import { Switch, Route } from 'react-router';
 
-type Props = {
+import Settings from './Settings';
+
+type RootProps = {
   store: any;
   history: History<any>;
 };
 
-export default class Root extends Component<Props> {
-  render() {
-    const { store, history } = this.props;
-    return (
-      <Provider store={store}>
-        <ConnectedRouter history={history}>
-          <Routes />
-        </ConnectedRouter>
-      </Provider>
-    );
-  }
-}
+const Root: React.FunctionComponent<RootProps> = ({ store, history }) => (
+  <Provider store={store}>
+    <ConnectedRouter history={history}>
+      <Switch>
+        <Route path="/" component={Settings} />
+      </Switch>
+    </ConnectedRouter>
+  </Provider>
+);
+
+export default Root;
