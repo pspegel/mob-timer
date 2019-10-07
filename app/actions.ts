@@ -1,0 +1,29 @@
+import { createStandardAction, ActionType } from 'typesafe-actions';
+
+export const shortenDuration = createStandardAction(
+  'mob-timer/SHORTEN_DURATION'
+)<void>();
+export const extendDuration = createStandardAction('mob-timer/EXTEND_DURATION')<
+  void
+>();
+
+export const manualNextDriver = createStandardAction(
+  'mob-timer/MANUAL_NEXT_DRIVER'
+)<void>();
+export const manualNextNavigator = createStandardAction(
+  'mob-timer/MANUAL_NEXT_NAVIGATOR'
+)<void>();
+export const manualSwitchDriverAndNavigator = createStandardAction(
+  'mob-timer/MANUAL_SWITCH_DRIVER_AND_NAVIGATOR'
+)<void>();
+
+export const copyDriversToNavigators = createStandardAction(
+  'mob-timer/COPY_DRIVERS_TO_NAVIGATORS'
+)<void>();
+
+export type RoleActions = ActionType<
+  | typeof manualNextDriver
+  | typeof manualNextNavigator
+  | typeof manualSwitchDriverAndNavigator
+  | typeof copyDriversToNavigators
+>;

@@ -35,10 +35,7 @@
     "transform": {
       "^.+\\.[jt]sx?$": "babel-jest"
     },
-    "testRegex": "test/.*(spec|test).(ts|tsx|js)$",
-    "setupFiles": [
-      "./internals/scripts/CheckBuiltsExist.js"
-    ]
+    "testRegex": "tests/.*\\.test\\.(ts|tsx|js)$"
   },
   "devDependencies": {
     "@babel/core": "^7.2.2",
@@ -131,7 +128,8 @@
     "react-router": "^4.3.1",
     "react-router-dom": "^4.3.1",
     "redux": "^4.0.1",
-    "source-map-support": "^0.5.9"
+    "source-map-support": "^0.5.9",
+    "typesafe-actions": "4.4.2"
   },
   "devEngines": {
     "node": ">=7.x",
