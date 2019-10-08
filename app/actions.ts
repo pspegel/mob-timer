@@ -21,9 +21,19 @@ export const copyDriversToNavigators = createStandardAction(
   'mob-timer/COPY_DRIVERS_TO_NAVIGATORS'
 )<void>();
 
+export const manualUpdateDrivers = createStandardAction(
+  'mob-timer/MANUAL_UPDATE_DRIVERS'
+)<string>();
+
+export const manualUpdateNavigators = createStandardAction(
+  'mob-timer/MANUAL_UPDATE_NAVIGATORS'
+)<string>();
+
 export type RoleActions = ActionType<
   | typeof manualNextDriver
   | typeof manualNextNavigator
   | typeof manualSwitchDriverAndNavigator
   | typeof copyDriversToNavigators
+  | typeof manualUpdateDrivers
+  | typeof manualUpdateNavigators
 >;

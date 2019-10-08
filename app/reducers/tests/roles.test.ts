@@ -1,8 +1,13 @@
+import _ from 'lodash';
+
 import roles, { RolesState } from '../roles';
 import {
   copyDriversToNavigators,
   manualNextDriver,
-  manualNextNavigator
+  manualNextNavigator,
+  manualSwitchDriverAndNavigator,
+  manualUpdateDrivers,
+  manualUpdateNavigators
 } from '../../actions';
 
 describe('roles reducer', () => {
@@ -127,5 +132,111 @@ describe('roles reducer', () => {
     const actual = roles(expected, manualNextNavigator());
 
     expect(actual).toBe(expected);
+  });
+
+  it('should be able to manually switch driver and navigator', () => {
+    const expected: Partial<RolesState> = {
+      driver: 'Han Solo',
+      navigator: 'C3PO'
+    };
+
+    const actual = roles(
+      {
+        drivers: someNames,
+        navigators: someNames,
+        driver: 'C3PO',
+        navigator: 'Han Solo'
+      },
+      manualSwitchDriverAndNavigator()
+    );
+
+    expect(actual).toMatchObject(expected);
+  });
+
+  it("should do nothing when manually switching driver and navigator when the driver doesn't exist in navigators", () => {
+    const expected: RolesState = {
+      drivers: someNames,
+      navigators: ['Han Solo'],
+      driver: 'C3PO',
+      navigator: 'Han Solo'
+    };
+
+    const actual = roles(expected, manualSwitchDriverAndNavigator());
+
+    expect(actual).toBe(expected);
+  });
+
+  it("should do nothing when manually switching driver and navigator when the navigator doesn't exist in drivers", () => {
+    const expected: RolesState = {
+      drivers: ['C3PO', 'Jabba the Hutt'],
+      navigators: ['Han Solo', 'C3PO'],
+      driver: 'C3PO',
+      navigator: 'Han Solo'
+    };
+
+    const actual = roles(expected, manualSwitchDriverAndNavigator());
+
+    expect(actual).toBe(expected);
+  });
+
+  it('should be possible to add a driver', () => {
+    const expected: RolesState = {
+      drivers: ['Han Solo'],
+      navigators: [],
+      driver: 'Han Solo',
+      navigator: null
+    };
+
+    const actual = roles(undefined, manualUpdateDrivers('\nHan Solo\n'));
+
+    expect(actual).toEqual(expected);
+  });
+
+  it("should not select the newly added driver if it's the current navigator", () => {
+    const navigator = 'Han Solo';
+    const expected: RolesState[] = [
+      {
+        drivers: ['Han Sol'],
+        navigators: ['C3PO', navigator],
+        driver: 'Han Sol',
+        navigator
+      },
+      {
+        drivers: ['Han Solo'],
+        navigators: ['C3PO', navigator],
+        driver: null,
+        navigator
+      },
+      {
+        drivers: ['Han Solomon'],
+        navigators: ['C3PO', navigator],
+        driver: 'Han Solomon',
+        navigator
+      }
+    ];
+
+    const actual = [
+      roles({ ...expected[0], drivers: [] }, manualUpdateDrivers('Han Sol'))
+    ];
+    actual.push(roles(actual[0], manualUpdateDrivers('Han Solo')));
+    actual.push(roles(actual[1], manualUpdateDrivers('Han Solomon')));
+
+    expect(actual).toEqual(expected);
+  });
+
+  it('should be possible to add a navigator', () => {
+    const expected: RolesState = {
+      drivers: [],
+      navigators: someNames,
+      driver: null,
+      navigator: 'C3PO'
+    };
+
+    const actual = roles(
+      { ...expected, navigators: _.dropRight(someNames) },
+      manualUpdateNavigators('Han Solo \n  C3PO\n\nJabba the Hutt')
+    );
+
+    expect(actual).toEqual(expected);
   });
 });
