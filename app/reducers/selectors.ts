@@ -30,3 +30,6 @@ export const navigatorsAsTextSelector = createSelector<
   newlineSelector,
   textWithTrailingNewline
 );
+
+export const driverSelector = (state: RootState) => state.roles.driver;
+export const navigatorSelector = (state: RootState) => state.roles.navigator;
