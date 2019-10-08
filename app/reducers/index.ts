@@ -2,11 +2,15 @@ import { combineReducers } from 'redux';
 import { connectRouter } from 'connected-react-router';
 import { History } from 'history';
 
-import roles from './roles';
+import roles, { RolesState } from './roles';
 
-export default function createRootReducer(history: History) {
-  return combineReducers({
+export type RootState = Readonly<{
+  router: any;
+  roles: RolesState;
+}>;
+
+export default (history: History) =>
+  combineReducers({
     router: connectRouter(history),
     roles
   });
-}

@@ -37,3 +37,8 @@ export type RoleActions = ActionType<
   | typeof manualUpdateDrivers
   | typeof manualUpdateNavigators
 >;
+
+export type ManualUpdateDriversAction = ActionType<typeof manualUpdateDrivers>;
+export type ManualUpdateNavigatorsAction = ActionType<
+  typeof manualUpdateNavigators
+>;

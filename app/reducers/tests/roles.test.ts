@@ -18,7 +18,8 @@ describe('roles reducer', () => {
       drivers: [],
       navigators: [],
       driver: null,
-      navigator: null
+      navigator: null,
+      newline: false
     };
 
     const actual = roles(undefined, { type: '' } as any);
@@ -31,7 +32,8 @@ describe('roles reducer', () => {
       drivers: [...someNames],
       navigators: [...someNames],
       driver: 'Han Solo',
-      navigator: 'C3PO'
+      navigator: 'C3PO',
+      newline: false
     };
 
     const actual = roles(
@@ -51,7 +53,8 @@ describe('roles reducer', () => {
           drivers: [...someNames],
           navigators: [...someNames],
           driver: 'Han Solo',
-          navigator: 'C3PO'
+          navigator: 'C3PO',
+          newline: false
         },
         manualNextDriver()
       )
@@ -80,7 +83,8 @@ describe('roles reducer', () => {
       drivers: ['Han Solo', 'R2D2'],
       driver: 'Han Solo',
       navigators: ['Han Solo', 'R2D2'],
-      navigator: 'R2D2'
+      navigator: 'R2D2',
+      newline: false
     };
 
     const actual = roles(expected, manualNextDriver());
@@ -97,7 +101,8 @@ describe('roles reducer', () => {
           drivers: [...someNames],
           navigators: [...someNames],
           driver: 'Han Solo',
-          navigator: 'C3PO'
+          navigator: 'C3PO',
+          newline: false
         },
         manualNextNavigator()
       )
@@ -126,7 +131,8 @@ describe('roles reducer', () => {
       drivers: ['Han Solo', 'R2D2'],
       driver: 'Han Solo',
       navigators: ['Han Solo', 'R2D2'],
-      navigator: 'R2D2'
+      navigator: 'R2D2',
+      newline: false
     };
 
     const actual = roles(expected, manualNextNavigator());
@@ -145,7 +151,8 @@ describe('roles reducer', () => {
         drivers: someNames,
         navigators: someNames,
         driver: 'C3PO',
-        navigator: 'Han Solo'
+        navigator: 'Han Solo',
+        newline: false
       },
       manualSwitchDriverAndNavigator()
     );
@@ -158,7 +165,8 @@ describe('roles reducer', () => {
       drivers: someNames,
       navigators: ['Han Solo'],
       driver: 'C3PO',
-      navigator: 'Han Solo'
+      navigator: 'Han Solo',
+      newline: false
     };
 
     const actual = roles(expected, manualSwitchDriverAndNavigator());
@@ -171,7 +179,8 @@ describe('roles reducer', () => {
       drivers: ['C3PO', 'Jabba the Hutt'],
       navigators: ['Han Solo', 'C3PO'],
       driver: 'C3PO',
-      navigator: 'Han Solo'
+      navigator: 'Han Solo',
+      newline: false
     };
 
     const actual = roles(expected, manualSwitchDriverAndNavigator());
@@ -184,7 +193,8 @@ describe('roles reducer', () => {
       drivers: ['Han Solo'],
       navigators: [],
       driver: 'Han Solo',
-      navigator: null
+      navigator: null,
+      newline: true
     };
 
     const actual = roles(undefined, manualUpdateDrivers('\nHan Solo\n'));
@@ -199,19 +209,22 @@ describe('roles reducer', () => {
         drivers: ['Han Sol'],
         navigators: ['C3PO', navigator],
         driver: 'Han Sol',
-        navigator
+        navigator,
+        newline: false
       },
       {
         drivers: ['Han Solo'],
         navigators: ['C3PO', navigator],
         driver: null,
-        navigator
+        navigator,
+        newline: false
       },
       {
         drivers: ['Han Solomon'],
         navigators: ['C3PO', navigator],
         driver: 'Han Solomon',
-        navigator
+        navigator,
+        newline: true
       }
     ];
 
@@ -219,7 +232,7 @@ describe('roles reducer', () => {
       roles({ ...expected[0], drivers: [] }, manualUpdateDrivers('Han Sol'))
     ];
     actual.push(roles(actual[0], manualUpdateDrivers('Han Solo')));
-    actual.push(roles(actual[1], manualUpdateDrivers('Han Solomon')));
+    actual.push(roles(actual[1], manualUpdateDrivers('Han Solomon\n')));
 
     expect(actual).toEqual(expected);
   });
@@ -229,7 +242,8 @@ describe('roles reducer', () => {
       drivers: [],
       navigators: someNames,
       driver: null,
-      navigator: 'C3PO'
+      navigator: 'C3PO',
+      newline: false
     };
 
     const actual = roles(
