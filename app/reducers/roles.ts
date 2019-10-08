@@ -113,18 +113,50 @@ const handleManualSwitchDriverAndNavigator = (state: RolesState) => {
   };
 };
 
+const manualUpdateHelper = (
+  list: string[],
+  nextList: string[],
+  current: string,
+  counterpart: string
+) => {
+  current = current || '';
+  counterpart = counterpart || '';
+
+  const oldIndex = list.findIndex(x => x === current);
+
+  let next = nextList[oldIndex] || '';
+
+  const leastCommonLength = Math.min(current.length, next.length);
+
+  if (
+    leastCommonLength === 0 ||
+    current.substring(0, leastCommonLength) !==
+      next.substring(0, leastCommonLength) ||
+    next === counterpart
+  ) {
+    next =
+      nextList.findIndex(d => d === current) === -1
+        ? nextList.length > 0
+          ? getNextExcept(nextList, null, counterpart)
+          : null
+        : current;
+  }
+
+  return next;
+};
+
 const handleManualUpdateDrivers = (
   state: RolesState,
   action: ManualUpdateDriversAction
 ) => {
   const { list: nextDrivers, newline } = textToList(action.payload);
 
-  const nextDriver =
-    nextDrivers.findIndex(d => d === state.driver) === -1
-      ? nextDrivers.length > 0
-        ? getNextExcept(nextDrivers, null, state.navigator)
-        : null
-      : state.driver;
+  const nextDriver = manualUpdateHelper(
+    state.drivers,
+    nextDrivers,
+    state.driver,
+    state.navigator
+  );
 
   return {
     ...state,
@@ -140,12 +172,12 @@ const handleManualUpdateNavigators = (
 ) => {
   const { list: nextNavigators, newline } = textToList(action.payload);
 
-  const nextNavigator =
-    nextNavigators.findIndex(d => d === state.navigator) === -1
-      ? nextNavigators.length > 0
-        ? getNextExcept(nextNavigators, null, state.driver)
-        : null
-      : state.navigator;
+  const nextNavigator = manualUpdateHelper(
+    state.navigators,
+    nextNavigators,
+    state.navigator,
+    state.driver
+  );
 
   return {
     ...state,

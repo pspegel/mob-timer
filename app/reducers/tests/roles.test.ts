@@ -253,4 +253,34 @@ describe('roles reducer', () => {
 
     expect(actual).toEqual(expected);
   });
+
+  it("should update the current driver when it's name is edited", () => {
+    const actual = roles(
+      {
+        drivers: someNames,
+        driver: 'C3PO',
+        navigators: [],
+        navigator: null,
+        newline: false
+      },
+      manualUpdateDrivers(' Han Solo\n\nC3\nJabba the Hutt')
+    );
+
+    expect(actual.driver).toEqual('C3');
+  });
+
+  it("should update the current navigator when it's name is edited", () => {
+    const actual = roles(
+      {
+        drivers: [],
+        driver: null,
+        navigators: someNames,
+        navigator: 'Jabba the Hutt',
+        newline: true
+      },
+      manualUpdateNavigators('Han Solo\n\nC3PO\nJabba the Hu\n')
+    );
+
+    expect(actual.navigator).toEqual('Jabba the Hu');
+  });
 });
