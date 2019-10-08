@@ -1,11 +1,28 @@
-import React from 'react';
-import { useSelector } from 'react-redux';
+import React, { useCallback } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 
 import { driverSelector, navigatorSelector } from '../reducers/selectors';
+import {
+  manualNextDriver,
+  manualNextNavigator,
+  manualSwitchDriverAndNavigator
+} from '../actions';
 
 const CurrentRoles: React.FunctionComponent<{}> = () => {
   const driver = useSelector(driverSelector);
   const navigator = useSelector(navigatorSelector);
+  const dispatch = useDispatch();
+  const nextDriver = useCallback(() => dispatch(manualNextDriver()), [
+    dispatch
+  ]);
+  const nextNavigator = useCallback(() => dispatch(manualNextNavigator()), [
+    dispatch
+  ]);
+  const swapRoles = useCallback(
+    () => dispatch(manualSwitchDriverAndNavigator()),
+    [dispatch]
+  );
+
   return (
     <div className="current-roles inner-wrap">
       <div className="name-wrap">Driver: {driver}</div>
@@ -14,11 +31,14 @@ const CurrentRoles: React.FunctionComponent<{}> = () => {
         <button type="button" id="run" disabled>
           Go!
         </button>
-        <button type="button" id="skipDriver">
+        <button type="button" onClick={nextDriver}>
           Skip driver
         </button>
-        <button type="button" id="skipNavigator">
+        <button type="button" onClick={nextNavigator}>
           Skip navigator
+        </button>
+        <button type="button" onClick={swapRoles}>
+          Switch driver/navigator
         </button>
       </div>
     </div>
