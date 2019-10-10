@@ -1,4 +1,7 @@
+import { Action } from 'redux';
 import { createStandardAction, ActionType } from 'typesafe-actions';
+
+export type RootAction = Action;
 
 export const shortenDuration = createStandardAction(
   'mob-timer/SHORTEN_DURATION'
@@ -29,7 +32,7 @@ export const manualUpdateNavigators = createStandardAction(
   'mob-timer/MANUAL_UPDATE_NAVIGATORS'
 )<string>();
 
-export type RoleActions = ActionType<
+export type RoleAction = ActionType<
   | typeof manualNextDriver
   | typeof manualNextNavigator
   | typeof manualSwitchDriverAndNavigator
@@ -41,4 +44,12 @@ export type RoleActions = ActionType<
 export type ManualUpdateDriversAction = ActionType<typeof manualUpdateDrivers>;
 export type ManualUpdateNavigatorsAction = ActionType<
   typeof manualUpdateNavigators
+>;
+
+export const timerStart = createStandardAction('mob-timer/TIMER_START')<void>();
+export const timerTick = createStandardAction('mob-timer/TIMER_TICK')<number>();
+export const timerEnded = createStandardAction('mob-timer/TIMER_ENDED')<void>();
+
+export type TimerAction = ActionType<
+  typeof timerStart | typeof timerTick | typeof timerEnded
 >;

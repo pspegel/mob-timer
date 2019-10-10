@@ -1,34 +1,40 @@
-import { createStore, applyMiddleware, compose } from 'redux';
+import { createStore, applyMiddleware, compose, Action } from 'redux';
 import { createHashHistory } from 'history';
-import { routerMiddleware, routerActions } from 'connected-react-router';
+import { routerMiddleware } from 'connected-react-router';
+import { createEpicMiddleware } from 'redux-observable';
 
-import createRootReducer from '../reducers';
+import createRootReducer, { RootState } from '../reducers';
+import rootEpic from '../epics';
 
 const history = createHashHistory();
 
 const rootReducer = createRootReducer(history);
 
 const configureStore = (initialState?: any) => {
-  const middleware = [];
-  const enhancers = [];
-  const router = routerMiddleware(history);
-  middleware.push(router);
+  const epicMiddleware = createEpicMiddleware<
+    Action<any>,
+    Action<any>,
+    RootState,
+    {}
+  >();
+  const middleware = [routerMiddleware(history), epicMiddleware];
 
-  const actionCreators = {
-    ...routerActions
-  };
+  const composeEnhancers =
+    process.env.NODE_ENV !== 'production' &&
+    typeof window === 'object' &&
+    (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
+      ? (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({})
+      : compose;
 
-  const composeEnhancers = (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
-    ? (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({
-        // Options: http://extension.remotedev.io/docs/API/Arguments.html
-        actionCreators
-      })
-    : compose;
+  const enhancers = applyMiddleware(...middleware);
 
-  enhancers.push(applyMiddleware(...middleware));
-  const enhancer = composeEnhancers(...enhancers);
+  const store = createStore(
+    rootReducer,
+    initialState,
+    composeEnhancers(enhancers)
+  );
 
-  const store = createStore(rootReducer, initialState, enhancer);
+  epicMiddleware.run(rootEpic as any);
 
   if ((module as any).hot) {
     (module as any).hot.accept('../reducers', () =>

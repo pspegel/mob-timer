@@ -5,13 +5,15 @@ import { driverSelector, navigatorSelector } from '../reducers/selectors';
 import {
   manualNextDriver,
   manualNextNavigator,
-  manualSwitchDriverAndNavigator
+  manualSwitchDriverAndNavigator,
+  timerStart
 } from '../actions';
 
 const CurrentRoles: React.FunctionComponent<{}> = () => {
   const driver = useSelector(driverSelector);
   const navigator = useSelector(navigatorSelector);
   const dispatch = useDispatch();
+  const startTimer = useCallback(() => dispatch(timerStart()), [dispatch]);
   const nextDriver = useCallback(() => dispatch(manualNextDriver()), [
     dispatch
   ]);
@@ -28,7 +30,7 @@ const CurrentRoles: React.FunctionComponent<{}> = () => {
       <div className="name-wrap">Driver: {driver}</div>
       <div className="name-wrap">Navigator: {navigator}</div>
       <div className="button-wrap">
-        <button type="button" id="run" disabled>
+        <button type="button" onClick={startTimer}>
           Go!
         </button>
         <button type="button" onClick={nextDriver}>

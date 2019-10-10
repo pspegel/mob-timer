@@ -1,7 +1,7 @@
 import { getType } from 'typesafe-actions';
 
 import {
-  RoleActions,
+  RoleAction,
   copyDriversToNavigators,
   manualNextDriver,
   manualNextNavigator,
@@ -187,7 +187,7 @@ const handleManualUpdateNavigators = (
   };
 };
 
-export default (state: RolesState = initialState, action: RoleActions) => {
+export default (state: RolesState = initialState, action: RoleAction) => {
   switch (action.type) {
     case getType(copyDriversToNavigators):
       return handleCopyDriversToNavigators(state);

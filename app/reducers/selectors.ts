@@ -33,3 +33,17 @@ export const navigatorsAsTextSelector = createSelector<
 
 export const driverSelector = (state: RootState) => state.roles.driver;
 export const navigatorSelector = (state: RootState) => state.roles.navigator;
+
+export const durationSelector = (state: RootState) => state.timer.duration;
+
+const secondsLeftSelector = (state: RootState) => state.timer.secondsLeft;
+
+export const timeSelector = createSelector<RootState, number, string>(
+  secondsLeftSelector,
+  secondsLeft => {
+    const minutes = Math.floor(secondsLeft / 60);
+    const seconds = secondsLeft - minutes * 60;
+
+    return `${minutes}`.padStart(2, '0') + ':' + `${seconds}`.padStart(2, '0');
+  }
+);
