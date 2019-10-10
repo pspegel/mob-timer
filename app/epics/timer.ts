@@ -13,6 +13,7 @@ const epic: Epic<RootAction, RootAction, RootState, {}> = (action$, store$) =>
     exhaustMap(() => {
       const duration = durationSelector(store$.value);
       return interval(1000).pipe(
+        map(seconds => seconds + 1), // Interval starts at 0
         map(seconds => timerTick(duration * 1 - seconds)),
         takeWhile(({ payload: secondsLeft }) => secondsLeft >= 0),
         endWith(timerEnded())

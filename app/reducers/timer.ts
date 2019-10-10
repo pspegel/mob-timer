@@ -1,6 +1,11 @@
 import { getType } from 'typesafe-actions';
 
-import { TimerAction, timerTick } from '../actions';
+import {
+  TimerAction,
+  timerTick,
+  incrementDuration,
+  decrementDuration
+} from '../actions';
 
 export type TimerState = Readonly<{
   duration: number;
@@ -8,6 +13,8 @@ export type TimerState = Readonly<{
 }>;
 
 const DEFAULT_DURATION = 7;
+const MAX_DURATION = 60;
+const MIN_DURATION = 1;
 
 const initialState: TimerState = {
   duration: DEFAULT_DURATION,
@@ -20,6 +27,18 @@ export default (state: TimerState = initialState, action: TimerAction) => {
       return {
         ...state,
         secondsLeft: action.payload
+      };
+
+    case getType(incrementDuration):
+      return {
+        ...state,
+        duration: Math.min(state.duration + 1, MAX_DURATION)
+      };
+
+    case getType(decrementDuration):
+      return {
+        ...state,
+        duration: Math.max(state.duration - 1, MIN_DURATION)
       };
 
     default:
