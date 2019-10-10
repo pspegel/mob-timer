@@ -7,8 +7,10 @@ import {
   manualNextNavigator,
   manualSwitchDriverAndNavigator,
   manualUpdateDrivers,
-  manualUpdateNavigators
+  manualUpdateNavigators,
+  timerEnded
 } from '../../actions';
+import { callReducerRecursively } from '../../utils/testUtils';
 
 describe('roles reducer', () => {
   const someNames = ['Han Solo', 'C3PO', 'Jabba the Hutt'];
@@ -19,7 +21,8 @@ describe('roles reducer', () => {
       navigators: [],
       driver: null,
       navigator: null,
-      newline: false
+      newline: false,
+      isValid: false
     };
 
     const actual = roles(undefined, { type: '' } as any);
@@ -33,7 +36,8 @@ describe('roles reducer', () => {
       navigators: [...someNames],
       driver: 'Han Solo',
       navigator: 'C3PO',
-      newline: false
+      newline: false,
+      isValid: true
     };
 
     const actual = roles(
@@ -54,7 +58,8 @@ describe('roles reducer', () => {
           navigators: [...someNames],
           driver: 'Han Solo',
           navigator: 'C3PO',
-          newline: false
+          newline: false,
+          isValid: true
         },
         manualNextDriver()
       )
@@ -84,7 +89,8 @@ describe('roles reducer', () => {
       driver: 'Han Solo',
       navigators: ['Han Solo', 'R2D2'],
       navigator: 'R2D2',
-      newline: false
+      newline: false,
+      isValid: true
     };
 
     const actual = roles(expected, manualNextDriver());
@@ -102,7 +108,8 @@ describe('roles reducer', () => {
           navigators: [...someNames],
           driver: 'Han Solo',
           navigator: 'C3PO',
-          newline: false
+          newline: false,
+          isValid: true
         },
         manualNextNavigator()
       )
@@ -118,7 +125,8 @@ describe('roles reducer', () => {
   it("should do nothing when manually skipping navigator and there's no navigators", () => {
     const expected: Partial<RolesState> = {
       navigators: [],
-      navigator: null
+      navigator: null,
+      isValid: false
     };
 
     const actual = roles(undefined, manualNextNavigator());
@@ -132,7 +140,8 @@ describe('roles reducer', () => {
       driver: 'Han Solo',
       navigators: ['Han Solo', 'R2D2'],
       navigator: 'R2D2',
-      newline: false
+      newline: false,
+      isValid: true
     };
 
     const actual = roles(expected, manualNextNavigator());
@@ -152,7 +161,8 @@ describe('roles reducer', () => {
         navigators: someNames,
         driver: 'C3PO',
         navigator: 'Han Solo',
-        newline: false
+        newline: false,
+        isValid: true
       },
       manualSwitchDriverAndNavigator()
     );
@@ -166,7 +176,8 @@ describe('roles reducer', () => {
       navigators: ['Han Solo'],
       driver: 'C3PO',
       navigator: 'Han Solo',
-      newline: false
+      newline: false,
+      isValid: false
     };
 
     const actual = roles(expected, manualSwitchDriverAndNavigator());
@@ -180,7 +191,8 @@ describe('roles reducer', () => {
       navigators: ['Han Solo', 'C3PO'],
       driver: 'C3PO',
       navigator: 'Han Solo',
-      newline: false
+      newline: false,
+      isValid: true
     };
 
     const actual = roles(expected, manualSwitchDriverAndNavigator());
@@ -194,7 +206,8 @@ describe('roles reducer', () => {
       navigators: [],
       driver: 'Han Solo',
       navigator: null,
-      newline: true
+      newline: true,
+      isValid: false
     };
 
     const actual = roles(undefined, manualUpdateDrivers('\nHan Solo\n'));
@@ -210,21 +223,24 @@ describe('roles reducer', () => {
         navigators: ['C3PO', navigator],
         driver: 'Han Sol',
         navigator,
-        newline: false
+        newline: false,
+        isValid: false
       },
       {
         drivers: ['Han Solo'],
         navigators: ['C3PO', navigator],
         driver: null,
         navigator,
-        newline: false
+        newline: false,
+        isValid: false
       },
       {
         drivers: ['Han Solomon'],
         navigators: ['C3PO', navigator],
         driver: 'Han Solomon',
         navigator,
-        newline: true
+        newline: true,
+        isValid: false
       }
     ];
 
@@ -243,7 +259,8 @@ describe('roles reducer', () => {
       navigators: someNames,
       driver: null,
       navigator: 'C3PO',
-      newline: false
+      newline: false,
+      isValid: false
     };
 
     const actual = roles(
@@ -261,7 +278,8 @@ describe('roles reducer', () => {
         driver: 'C3PO',
         navigators: [],
         navigator: null,
-        newline: false
+        newline: false,
+        isValid: false
       },
       manualUpdateDrivers(' Han Solo\n\nC3\nJabba the Hutt')
     );
@@ -276,11 +294,76 @@ describe('roles reducer', () => {
         driver: null,
         navigators: someNames,
         navigator: 'Jabba the Hutt',
-        newline: true
+        newline: true,
+        isValid: false
       },
       manualUpdateNavigators('Han Solo\n\nC3PO\nJabba the Hu\n')
     );
 
     expect(actual.navigator).toEqual('Jabba the Hu');
+  });
+
+  it('should switch around the roles when the round ends', () => {
+    const expected = [
+      { driver: 'Stormtrooper', navigator: 'Jango Fett', isValid: true },
+      { driver: 'Leia', navigator: 'Stormtrooper', isValid: true },
+      { driver: 'Amidala', navigator: 'Boba Fett', isValid: true },
+      { driver: 'Boba Fett', navigator: 'Jango Fett', isValid: true }
+    ].map(x => expect.objectContaining(x));
+
+    const state: RolesState = {
+      drivers: ['Jango Fett', 'Stormtrooper', 'Leia', 'Amidala', 'Boba Fett'],
+      navigators: ['Boba Fett', 'Jango Fett', 'Leia', 'Stormtrooper'],
+      driver: 'Jango Fett',
+      navigator: 'Boba Fett',
+      newline: false,
+      isValid: true
+    };
+
+    const actual = callReducerRecursively(roles, state, timerEnded(), 4);
+
+    expect(actual).toEqual(expected);
+  });
+
+  it("should mark the state as invalid when the rotation can't be solved", () => {
+    const expected: Partial<RolesState> = {
+      driver: 'Stormtrooper',
+      navigator: null,
+      isValid: false
+    };
+
+    const state: RolesState = {
+      drivers: ['Jango Fett', 'Stormtrooper'],
+      navigators: ['Amidala', 'Stormtrooper'],
+      driver: 'Jango Fett',
+      navigator: 'Amidala',
+      newline: false,
+      isValid: true
+    };
+
+    const actual = roles(state, timerEnded());
+
+    expect(actual).toMatchObject(expected);
+  });
+
+  it('should be possible to recover from an invalid state where a navigator is missing', () => {
+    const expected: Partial<RolesState> = {
+      driver: 'Stormtrooper',
+      navigator: 'Amidala',
+      isValid: true
+    };
+
+    const state: RolesState = {
+      drivers: ['Jango Fett', 'Stormtrooper'],
+      navigators: ['Amidala', 'Stormtrooper'],
+      driver: 'Stormtrooper',
+      navigator: null,
+      newline: false,
+      isValid: false
+    };
+
+    const actual = roles(state, manualNextNavigator());
+
+    expect(actual).toMatchObject(expected);
   });
 });

@@ -39,6 +39,7 @@ export type RoleAction = ActionType<
   | typeof copyDriversToNavigators
   | typeof manualUpdateDrivers
   | typeof manualUpdateNavigators
+  | typeof timerEnded
 >;
 
 export type ManualUpdateDriversAction = ActionType<typeof manualUpdateDrivers>;

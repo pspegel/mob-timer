@@ -9,7 +9,8 @@ import {
   manualUpdateDrivers,
   manualUpdateNavigators,
   ManualUpdateDriversAction,
-  ManualUpdateNavigatorsAction
+  ManualUpdateNavigatorsAction,
+  timerEnded
 } from '../actions';
 
 export type RolesState = Readonly<{
@@ -18,6 +19,7 @@ export type RolesState = Readonly<{
   driver: string;
   navigator: string;
   newline: boolean;
+  isValid: boolean;
 }>;
 
 const initialState: RolesState = {
@@ -25,17 +27,24 @@ const initialState: RolesState = {
   navigators: [],
   driver: null,
   navigator: null,
-  newline: false
+  newline: false,
+  isValid: false
 };
 
-const getNextExcept = (list: string[], current: string, except: string) => {
+const getNextExcept = (list: string[], current: string, except?: string) => {
   const allExcept = list.filter(x => x !== except);
 
   const currentIndex = current ? allExcept.findIndex(x => x === current) : -1;
 
   const extendedList = [...allExcept, ...allExcept];
 
-  return extendedList[currentIndex + 1] || null;
+  const next = extendedList[currentIndex + 1];
+
+  if (!next || next === current) {
+    return null;
+  }
+
+  return next;
 };
 
 const textToList = (text: string) => ({
@@ -53,17 +62,13 @@ const handleCopyDriversToNavigators = (state: RolesState) => ({
 });
 
 const handleManualNextDriver = (state: RolesState) => {
-  if (!state.driver) {
-    return state;
-  }
-
   const nextDriver = getNextExcept(
     state.drivers,
     state.driver,
     state.navigator
   );
 
-  if (nextDriver === state.driver) {
+  if (!nextDriver) {
     return state;
   }
 
@@ -74,17 +79,13 @@ const handleManualNextDriver = (state: RolesState) => {
 };
 
 const handleManualNextNavigator = (state: RolesState) => {
-  if (!state.navigator) {
-    return state;
-  }
-
   const nextNavigator = getNextExcept(
     state.navigators,
     state.navigator,
     state.driver
   );
 
-  if (nextNavigator === state.navigator) {
+  if (!nextNavigator) {
     return state;
   }
 
@@ -172,7 +173,7 @@ const handleManualUpdateNavigators = (
 ) => {
   const { list: nextNavigators, newline } = textToList(action.payload);
 
-  const nextNavigator = manualUpdateHelper(
+  let nextNavigator = manualUpdateHelper(
     state.navigators,
     nextNavigators,
     state.navigator,
@@ -187,7 +188,23 @@ const handleManualUpdateNavigators = (
   };
 };
 
-export default (state: RolesState = initialState, action: RoleAction) => {
+const handleTimerEnded = (state: RolesState) => {
+  const nextDriver = getNextExcept(state.drivers, state.driver);
+
+  const nextNavigator = getNextExcept(
+    state.navigators,
+    state.navigator,
+    nextDriver
+  );
+
+  return {
+    ...state,
+    driver: nextDriver,
+    navigator: nextNavigator
+  };
+};
+
+const innerReducer = (state: RolesState, action: RoleAction) => {
   switch (action.type) {
     case getType(copyDriversToNavigators):
       return handleCopyDriversToNavigators(state);
@@ -207,7 +224,32 @@ export default (state: RolesState = initialState, action: RoleAction) => {
     case getType(manualUpdateNavigators):
       return handleManualUpdateNavigators(state, action);
 
+    case getType(timerEnded):
+      return handleTimerEnded(state);
+
     default:
       return state;
   }
+};
+
+const validate = (state: RolesState) => {
+  const isValid =
+    state.drivers.length >= 2 &&
+    state.navigators.length >= 2 &&
+    !!state.driver &&
+    !!state.navigator;
+
+  return {
+    ...state,
+    isValid
+  };
+};
+
+export default (state: RolesState = initialState, action: RoleAction) => {
+  const nextState = innerReducer(state, action);
+  if (nextState !== state) {
+    return validate(nextState);
+  }
+
+  return state;
 };
