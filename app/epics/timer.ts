@@ -1,5 +1,12 @@
 import { interval } from 'rxjs';
-import { filter, exhaustMap, map, takeWhile, endWith } from 'rxjs/operators';
+import {
+  filter,
+  exhaustMap,
+  map,
+  takeWhile,
+  endWith,
+  startWith
+} from 'rxjs/operators';
 import { Epic } from 'redux-observable';
 import { isActionOf } from 'typesafe-actions';
 
@@ -16,6 +23,7 @@ const epic: Epic<RootAction, RootAction, RootState, {}> = (action$, store$) =>
         map(seconds => seconds + 1), // Interval starts at 0
         map(seconds => timerTick(duration * 1 - seconds)),
         takeWhile(({ payload: secondsLeft }) => secondsLeft >= 0),
+        startWith(timerTick(duration * 1)),
         endWith(timerEnded())
       );
     })
