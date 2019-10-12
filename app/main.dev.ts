@@ -64,7 +64,7 @@ app.on('ready', async () => {
   }
 
   mainWindow = new BrowserWindow({
-    icon: path.join(__dirname, '/favicon.ico'),
+    icon: path.join(__dirname, '../favicon.ico'),
     show: false,
     resizable: false,
     movable: false,
