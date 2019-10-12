@@ -5,13 +5,13 @@ import {
   driverSelector,
   navigatorSelector,
   isValidSelector
-} from '../reducers/selectors';
+} from 'app/reducers/selectors';
 import {
   manualNextDriver,
   manualNextNavigator,
   manualSwitchDriverAndNavigator,
   timerStart
-} from '../actions';
+} from 'app/actions';
 
 const CurrentRoles: React.FunctionComponent<{}> = () => {
   const driver = useSelector(driverSelector);

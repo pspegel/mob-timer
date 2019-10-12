@@ -10,13 +10,13 @@ import {
 import { Epic } from 'redux-observable';
 import { isActionOf } from 'typesafe-actions';
 
-import { timerStart, timerTick, timerEnded, RootAction } from '../actions';
-import { RootState } from '../reducers';
+import { timerStart, timerTick, timerEnded, RootAction } from 'app/actions';
+import { RootState } from 'app/reducers';
 import {
   durationSelector,
   secondsPerMinuteSelector,
   isValidSelector
-} from '../reducers/selectors';
+} from 'app/reducers/selectors';
 
 const epic: Epic<RootAction, RootAction, RootState, {}> = (action$, store$) =>
   action$.pipe(

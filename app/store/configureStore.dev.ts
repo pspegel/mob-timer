@@ -3,8 +3,8 @@ import { createHashHistory } from 'history';
 import { routerMiddleware } from 'connected-react-router';
 import { createEpicMiddleware } from 'redux-observable';
 
-import createRootReducer, { RootState } from '../reducers';
-import rootEpic from '../epics';
+import createRootReducer, { RootState } from 'app/reducers';
+import rootEpic from 'app/epics';
 
 const history = createHashHistory();
 
@@ -37,8 +37,8 @@ const configureStore = (initialState?: any) => {
   epicMiddleware.run(rootEpic as any);
 
   if ((module as any).hot) {
-    (module as any).hot.accept('../reducers', () =>
-      store.replaceReducer(require('../reducers').default)
+    (module as any).hot.accept('app/reducers', () =>
+      store.replaceReducer(require('app/reducers').default)
     );
   }
 

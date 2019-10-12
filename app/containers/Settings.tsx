@@ -1,11 +1,11 @@
 import React, { useEffect } from 'react';
 import { ipcRenderer } from 'electron';
 
-import Timer from '../components/Timer';
-import CurrentRoles from '../components/CurrentRoles';
-import Duration from '../components/Duration';
-import Drivers from '../components/Drivers';
-import Navigators from '../components/Navigators';
+import Timer from 'app/components/Timer';
+import CurrentRoles from 'app/components/CurrentRoles';
+import Duration from 'app/components/Duration';
+import Drivers from 'app/components/Drivers';
+import Navigators from 'app/components/Navigators';
 
 const Settings: React.FunctionComponent<{}> = () => {
   useEffect(() => {

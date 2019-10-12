@@ -22,7 +22,8 @@
     "testURL": "http://localhost/",
     "moduleNameMapper": {
       "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/internals/mocks/fileMock.js",
-      "\\.(css|less|sass|scss)$": "identity-obj-proxy"
+      "\\.(css|less|sass|scss)$": "identity-obj-proxy",
+      "app/(.*)": "<rootDir>/app/$1"
     },
     "moduleFileExtensions": [
       "js",
@@ -30,10 +31,14 @@
       "tsx",
       "json"
     ],
+    "moduleDirectories": [
+      "node_modules",
+      "app"
+    ],
+    "testRegex": "tests/.*\\.test\\.(js|ts|tsx)$",
     "transform": {
-      "^.+\\.[jt]sx?$": "babel-jest"
-    },
-    "testRegex": "tests/.*\\.test\\.(ts|tsx|js)$"
+      "\\.(ts|tsx)$": "ts-jest"
+    }
   },
   "devDependencies": {
     "@babel/core": "^7.2.2",
@@ -102,7 +107,9 @@
     "stylelint-config-prettier": "^4.0.0",
     "stylelint-config-standard": "^18.2.0",
     "terser-webpack-plugin": "^1.2.1",
+    "ts-jest": "23.10.5",
     "ts-loader": "^5.3.2",
+    "tsconfig-paths-webpack-plugin": "3.2.0",
     "typescript": "^3.2.2",
     "url-loader": "^1.1.2",
     "webpack": "^4.28.3",

@@ -11,7 +11,7 @@ import {
   ManualUpdateDriversAction,
   ManualUpdateNavigatorsAction,
   timerEnded
-} from '../actions';
+} from 'app/actions';
 
 export type RolesState = Readonly<{
   drivers: string[];

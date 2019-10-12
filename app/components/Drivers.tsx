@@ -1,8 +1,8 @@
 import React, { useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
-import { driversAsTextSelector } from '../reducers/selectors';
-import { manualUpdateDrivers } from '../actions';
+import { driversAsTextSelector } from 'app/reducers/selectors';
+import { manualUpdateDrivers } from 'app/actions';
 
 const Drivers: React.FunctionComponent<{}> = () => {
   const roles = useSelector(driversAsTextSelector);

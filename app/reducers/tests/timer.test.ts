@@ -1,7 +1,7 @@
 import _ from 'lodash';
 
 import timer, { TimerState } from '../timer';
-import { timerTick, incrementDuration, decrementDuration } from '../../actions';
+import { timerTick, incrementDuration, decrementDuration } from 'app/actions';
 
 describe('timer reducer', () => {
   it('should have an initial state', () => {

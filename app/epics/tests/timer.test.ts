@@ -1,7 +1,7 @@
 import { TestScheduler } from 'rxjs/testing';
 
 import timer from '../timer';
-import { timerStart, timerTick, timerEnded } from '../../actions';
+import { timerStart, timerTick, timerEnded } from 'app/actions';
 import { TimerState } from 'app/reducers/timer';
 
 const secondsPerMinute = 1; // To reduce the number of emitted actions in the test

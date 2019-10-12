@@ -13,6 +13,7 @@ import merge from 'webpack-merge';
 import { spawn, execSync } from 'child_process';
 import baseConfig from './webpack.config.base';
 import CheckNodeEnv from '../internals/scripts/CheckNodeEnv';
+import TsconfigPathsPlugin from 'tsconfig-paths-webpack-plugin';
 
 CheckNodeEnv('development');
 
@@ -35,6 +36,8 @@ if (!requiredByDLLConfig && !(fs.existsSync(dll) && fs.existsSync(manifest))) {
   );
   execSync('yarn build-dll');
 }
+
+const appPath = subDir => path.join(__dirname, 'app', subDir);
 
 export default merge.smart(baseConfig, {
   devtool: 'inline-source-map',
@@ -161,6 +164,16 @@ export default merge.smart(baseConfig, {
         use: 'url-loader'
       }
     ]
+  },
+
+  resolve: {
+    modules: ['node_modules', 'app'],
+    extensions: ['.ts', '.tsx', '.js', '.json'],
+    mainFields: ['browser', 'jsnext:main', 'main'],
+    plugins: [new TsconfigPathsPlugin({ configFile: './tsconfig.json' })],
+    alias: {
+      utils: appPath('app')
+    }
   },
 
   plugins: [

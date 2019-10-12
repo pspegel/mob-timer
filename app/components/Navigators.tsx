@@ -1,8 +1,8 @@
 import React, { useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
-import { navigatorsAsTextSelector } from '../reducers/selectors';
-import { manualUpdateNavigators } from '../actions';
+import { navigatorsAsTextSelector } from 'app/reducers/selectors';
+import { manualUpdateNavigators } from 'app/actions';
 
 const Navigators: React.FunctionComponent<{}> = () => {
   const navigators = useSelector(navigatorsAsTextSelector);

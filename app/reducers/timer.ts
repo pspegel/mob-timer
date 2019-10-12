@@ -5,7 +5,7 @@ import {
   timerTick,
   incrementDuration,
   decrementDuration
-} from '../actions';
+} from 'app/actions';
 
 export type TimerState = Readonly<{
   duration: number;

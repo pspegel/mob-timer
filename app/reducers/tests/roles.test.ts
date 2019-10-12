@@ -9,8 +9,8 @@ import {
   manualUpdateDrivers,
   manualUpdateNavigators,
   timerEnded
-} from '../../actions';
-import { callReducerRecursively } from '../../utils/testUtils';
+} from 'app/actions';
+import { callReducerRecursively } from 'app/utils/testUtils';
 
 describe('roles reducer', () => {
   const someNames = ['Han Solo', 'C3PO', 'Jabba the Hutt'];
