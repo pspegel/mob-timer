@@ -189,7 +189,10 @@ const handleManualUpdateNavigators = (
 };
 
 const handleTimerEnded = (state: RolesState) => {
-  const nextDriver = getNextExcept(state.drivers, state.driver);
+  const nextDriver =
+    state.drivers.length === 1
+      ? state.driver
+      : getNextExcept(state.drivers, state.driver);
 
   const nextNavigator = getNextExcept(
     state.navigators,
@@ -234,7 +237,7 @@ const innerReducer = (state: RolesState, action: RoleAction) => {
 
 const validate = (state: RolesState) => {
   const isValid =
-    state.drivers.length >= 2 &&
+    state.drivers.length >= 1 &&
     state.navigators.length >= 2 &&
     !!state.driver &&
     !!state.navigator;

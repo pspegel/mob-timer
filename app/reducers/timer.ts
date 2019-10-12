@@ -10,15 +10,18 @@ import {
 export type TimerState = Readonly<{
   duration: number;
   secondsLeft: number;
+  secondsPerMinute: number;
 }>;
 
 const DEFAULT_DURATION = 7;
 const MAX_DURATION = 60;
 const MIN_DURATION = 1;
+const SECONDS_PER_MINUTE = 1; // To make it easier to test.
 
 const initialState: TimerState = {
   duration: DEFAULT_DURATION,
-  secondsLeft: 0
+  secondsLeft: 0,
+  secondsPerMinute: SECONDS_PER_MINUTE
 };
 
 export default (state: TimerState = initialState, action: TimerAction) => {

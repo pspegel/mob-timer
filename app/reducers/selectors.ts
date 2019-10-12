@@ -47,3 +47,8 @@ export const timeSelector = createSelector<RootState, number, string>(
     return `${minutes}`.padStart(2, '0') + ':' + `${seconds}`.padStart(2, '0');
   }
 );
+
+export const secondsPerMinuteSelector = (state: RootState) =>
+  state.timer.secondsPerMinute; // For test
+
+export const isValidSelector = (state: RootState) => state.roles.isValid;

@@ -7,7 +7,8 @@ describe('timer reducer', () => {
   it('should have an initial state', () => {
     const expected: TimerState = {
       duration: 7,
-      secondsLeft: 0
+      secondsLeft: 0,
+      secondsPerMinute: 60
     };
 
     const actual = timer(undefined, { type: '' } as any);
@@ -18,7 +19,8 @@ describe('timer reducer', () => {
   it('should be able to update the number of seconds left', () => {
     const expected: TimerState = {
       duration: 7,
-      secondsLeft: 155
+      secondsLeft: 155,
+      secondsPerMinute: 60
     };
 
     const actual = timer(
@@ -32,7 +34,8 @@ describe('timer reducer', () => {
   it('should be possible to increase the duration by one minute', () => {
     const expected: TimerState = {
       duration: 8,
-      secondsLeft: 0
+      secondsLeft: 0,
+      secondsPerMinute: 60
     };
 
     const actual = timer(undefined, incrementDuration());
@@ -43,7 +46,8 @@ describe('timer reducer', () => {
   it('should be possible to reduce the duration by one minute', () => {
     const expected: TimerState = {
       duration: 6,
-      secondsLeft: 0
+      secondsLeft: 0,
+      secondsPerMinute: 60
     };
 
     const actual = timer(undefined, decrementDuration());
@@ -58,7 +62,10 @@ describe('timer reducer', () => {
     );
 
     const actual = [
-      timer({ duration: 59, secondsLeft: 0 }, incrementDuration())
+      timer(
+        { duration: 59, secondsLeft: 0, secondsPerMinute: 60 },
+        incrementDuration()
+      )
     ];
     actual.push(timer(actual[0], incrementDuration()));
 
@@ -69,7 +76,10 @@ describe('timer reducer', () => {
     const expected = _.fill(Array(2), expect.objectContaining({ duration: 1 }));
 
     const actual = [
-      timer({ duration: 2, secondsLeft: 0 }, decrementDuration())
+      timer(
+        { duration: 2, secondsLeft: 0, secondsPerMinute: 60 },
+        decrementDuration()
+      )
     ];
     actual.push(timer(actual[0], decrementDuration()));
 

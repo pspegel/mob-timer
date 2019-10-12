@@ -224,7 +224,7 @@ describe('roles reducer', () => {
         driver: 'Han Sol',
         navigator,
         newline: false,
-        isValid: false
+        isValid: true
       },
       {
         drivers: ['Han Solo'],
@@ -240,7 +240,7 @@ describe('roles reducer', () => {
         driver: 'Han Solomon',
         navigator,
         newline: true,
-        isValid: false
+        isValid: true
       }
     ];
 
@@ -320,12 +320,43 @@ describe('roles reducer', () => {
       isValid: true
     };
 
-    const actual = callReducerRecursively(roles, state, timerEnded(), 4);
+    const actual = callReducerRecursively(
+      roles,
+      state,
+      timerEnded(),
+      expected.length
+    );
 
     expect(actual).toEqual(expected);
   });
 
-  it("should mark the state as invalid when the rotation can't be solved", () => {
+  it("should rotate the navigators when there's a single driver", () => {
+    const expected = [
+      { driver: 'Jango Fett', navigator: 'Leia', isValid: true },
+      { driver: 'Jango Fett', navigator: 'Boba Fett', isValid: true },
+      { driver: 'Jango Fett', navigator: 'Leia', isValid: true }
+    ].map(x => expect.objectContaining(x));
+
+    const state: RolesState = {
+      drivers: ['Jango Fett'],
+      navigators: ['Boba Fett', 'Jango Fett', 'Leia'],
+      driver: 'Jango Fett',
+      navigator: 'Boba Fett',
+      newline: false,
+      isValid: true
+    };
+
+    const actual = callReducerRecursively(
+      roles,
+      state,
+      timerEnded(),
+      expected.length
+    );
+
+    expect(actual).toEqual(expected);
+  });
+
+  it("should mark the state as invalid when the next navigator can't be resolved", () => {
     const expected: Partial<RolesState> = {
       driver: 'Stormtrooper',
       navigator: null,
