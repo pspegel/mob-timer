@@ -32,18 +32,29 @@ const CurrentRoles: React.FunctionComponent<{}> = () => {
 
   return (
     <div className="current-roles inner-wrap">
-      <div className="name-wrap">Driver: {driver}</div>
-      <div className="name-wrap">Navigator: {navigator}</div>
+      <div className="name-wrap">
+        Driver: <span>{driver}</span>
+      </div>
+      <div className="name-wrap">
+        Navigator: <span>{navigator}</span>
+      </div>
       <div className="button-wrap">
-        <button type="button" onClick={startTimer} disabled={!isValid}>
+        <button
+          type="button"
+          onClick={startTimer}
+          disabled={!isValid}
+          className="go-button"
+        >
           Go!
         </button>
-        <button type="button" onClick={nextDriver}>
-          Skip driver
-        </button>
-        <button type="button" onClick={nextNavigator}>
-          Skip navigator
-        </button>
+        <div className="form-group">
+          <button type="button" onClick={nextDriver}>
+            Skip driver
+          </button>
+          <button type="button" onClick={nextNavigator}>
+            Skip navigator
+          </button>
+        </div>
         <button type="button" onClick={swapRoles}>
           Switch driver/navigator
         </button>

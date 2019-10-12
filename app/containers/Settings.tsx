@@ -8,12 +8,17 @@ import Navigators from '../components/Navigators';
 
 const Settings: React.FunctionComponent<{}> = () => (
   <div className="settings">
-    <h1>Mob timer</h1>
-    <Timer />
-    <CurrentRoles />
-    <Duration />
-    <Drivers />
-    <Navigators />
+    <div className="settings-timesup">
+      <span>Time's up!</span>
+    </div>
+    <div className="settings-content">
+      <h1>Mob timer</h1>
+      <Timer />
+      <CurrentRoles />
+      <Duration />
+      <Drivers />
+      <Navigators />
+    </div>
   </div>
 );
 

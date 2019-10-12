@@ -17,21 +17,23 @@ const Duration: React.FunctionComponent<{}> = () => {
   return (
     <>
       <h2>Duration</h2>
-      <input type="text" value={duration} />
-      <button
-        type="button"
-        onClick={decrement}
-        disabled={duration <= MIN_DURATION}
-      >
-        -
-      </button>
-      <button
-        type="button"
-        onClick={increment}
-        disabled={duration >= MAX_DURATION}
-      >
-        +
-      </button>
+      <div className="form-group">
+        <input type="text" value={duration} />
+        <button
+          type="button"
+          onClick={decrement}
+          disabled={duration <= MIN_DURATION}
+        >
+          -
+        </button>
+        <button
+          type="button"
+          onClick={increment}
+          disabled={duration >= MAX_DURATION}
+        >
+          +
+        </button>
+      </div>
     </>
   );
 };
