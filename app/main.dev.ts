@@ -6,9 +6,10 @@
  * When running `yarn build` or `yarn build-main`, this file is compiled to
  * `./app/main.prod.js` using webpack. This gives us some performance wins.
  */
-import { app, BrowserWindow } from 'electron';
+import { app, BrowserWindow, ipcMain, WebContents } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
+import path from 'path';
 
 export default class AppUpdater {
   constructor() {
@@ -63,26 +64,29 @@ app.on('ready', async () => {
   }
 
   mainWindow = new BrowserWindow({
+    icon: path.join(__dirname, '/favicon.ico'),
     show: false,
-    width: 1024,
-    height: 728
+    resizable: false,
+    movable: false,
+    alwaysOnTop: true,
+    fullscreen: true,
+    webPreferences: {
+      nodeIntegration: true
+    }
   });
 
-  mainWindow.loadURL(`file://${__dirname}/app.html`);
+  const webContents: WebContents = mainWindow.webContents;
+  webContents.openDevTools({ mode: 'right' });
 
-  // @TODO: Use 'ready-to-show' event
-  //        https://github.com/electron/electron/blob/master/docs/api/browser-window.md#using-ready-to-show-event
-  mainWindow.webContents.on('did-finish-load', () => {
+  ipcMain.once('react-app-loaded', () => {
     if (!mainWindow) {
       throw new Error('"mainWindow" is not defined');
     }
-    if (process.env.START_MINIMIZED) {
-      mainWindow.minimize();
-    } else {
-      mainWindow.show();
-      mainWindow.focus();
-    }
+    mainWindow.show();
+    mainWindow.focus();
   });
+
+  mainWindow.loadURL(`file://${__dirname}/app.html`);
 
   mainWindow.on('closed', () => {
     mainWindow = null;
