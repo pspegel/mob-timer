@@ -9,15 +9,13 @@
     "build-dll": "cross-env NODE_ENV=development webpack --config ./configs/webpack.config.renderer.dev.dll.babel.js --colors",
     "build-main": "cross-env NODE_ENV=production webpack --config ./configs/webpack.config.main.prod.babel.js --colors",
     "build-renderer": "cross-env NODE_ENV=production webpack --config ./configs/webpack.config.renderer.prod.babel.js --colors",
-    "dev": "cross-env START_HOT=1 node -r @babel/register ./internals/scripts/CheckPortInUse.js && cross-env START_HOT=1 yarn start-renderer-dev",
-    "postinstall": "electron-builder install-app-deps package.json && yarn build-dll && opencollective-postinstall",
-    "prestart": "yarn build",
-    "start": "cross-env NODE_ENV=production electron ./app/main.prod.js",
+    "prestart:prod": "yarn build",
+    "start": "cross-env START_HOT=1 node -r @babel/register ./internals/scripts/CheckPortInUse.js && cross-env START_HOT=1 yarn start-renderer-dev",
+    "start:prod": "cross-env NODE_ENV=production electron ./app/main.prod.js",
     "start-main-dev": "cross-env HOT=1 NODE_ENV=development electron ./app/main.dev.babel.js",
     "start-renderer-dev": "cross-env NODE_ENV=development webpack-dev-server --config configs/webpack.config.renderer.dev.babel.js",
     "test": "cross-env NODE_ENV=test BABEL_DISABLE_CACHE=1 jest",
-    "test-all": "yarn lint && yarn build && yarn test && yarn build-e2e && yarn test-e2e",
-    "test-watch": "yarn test --watch"
+    "test:watch": "yarn test --watch"
   },
   "main": "./app/main.prod.js",
   "jest": {
@@ -92,7 +90,6 @@
     "lint-staged": "^8.1.0",
     "mini-css-extract-plugin": "^0.5.0",
     "node-sass": "^4.11.0",
-    "opencollective-postinstall": "^2.0.1",
     "optimize-css-assets-webpack-plugin": "^5.0.1",
     "prettier": "^1.15.3",
     "react-test-renderer": "^16.7.0",
