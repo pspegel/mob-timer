@@ -1,7 +1,11 @@
 import React, { useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
-import { driverSelector, navigatorSelector } from '../reducers/selectors';
+import {
+  driverSelector,
+  navigatorSelector,
+  isValidSelector
+} from '../reducers/selectors';
 import {
   manualNextDriver,
   manualNextNavigator,
@@ -12,6 +16,7 @@ import {
 const CurrentRoles: React.FunctionComponent<{}> = () => {
   const driver = useSelector(driverSelector);
   const navigator = useSelector(navigatorSelector);
+  const isValid = useSelector(isValidSelector);
   const dispatch = useDispatch();
   const startTimer = useCallback(() => dispatch(timerStart()), [dispatch]);
   const nextDriver = useCallback(() => dispatch(manualNextDriver()), [
@@ -30,7 +35,7 @@ const CurrentRoles: React.FunctionComponent<{}> = () => {
       <div className="name-wrap">Driver: {driver}</div>
       <div className="name-wrap">Navigator: {navigator}</div>
       <div className="button-wrap">
-        <button type="button" onClick={startTimer}>
+        <button type="button" onClick={startTimer} disabled={!isValid}>
           Go!
         </button>
         <button type="button" onClick={nextDriver}>

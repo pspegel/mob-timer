@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { incrementDuration, decrementDuration } from '../actions';
 import { durationSelector } from '../reducers/selectors';
+import { MAX_DURATION, MIN_DURATION } from '../reducers/timer';
 
 const Duration: React.FunctionComponent<{}> = () => {
   const duration = useSelector(durationSelector);
@@ -17,10 +18,18 @@ const Duration: React.FunctionComponent<{}> = () => {
     <>
       <h2>Duration</h2>
       <input type="text" value={duration} />
-      <button type="button" onClick={decrement}>
+      <button
+        type="button"
+        onClick={decrement}
+        disabled={duration <= MIN_DURATION}
+      >
         -
       </button>
-      <button type="button" onClick={increment}>
+      <button
+        type="button"
+        onClick={increment}
+        disabled={duration >= MAX_DURATION}
+      >
         +
       </button>
     </>
