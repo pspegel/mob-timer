@@ -6,10 +6,11 @@
  * When running `yarn build` or `yarn build-main`, this file is compiled to
  * `./app/main.prod.js` using webpack. This gives us some performance wins.
  */
-import { app, BrowserWindow, ipcMain, WebContents } from 'electron';
+import electron, { app, BrowserWindow, ipcMain, WebContents } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
 import path from 'path';
+import url from 'url';
 
 export default class AppUpdater {
   constructor() {
@@ -41,6 +42,38 @@ const installExtensions = async () => {
   return Promise.all(
     extensions.map(name => installer.default(installer[name], forceDownload))
   ).catch(console.log);
+};
+
+const blockExternalDisplays = () => {
+  const displays = electron.screen.getAllDisplays();
+  const primaryDisplayId = electron.screen.getPrimaryDisplay().id;
+  for (const i in displays) {
+    if (displays[i].id === primaryDisplayId) {
+      continue;
+    }
+
+    const externalDisplay = displays[i];
+    const extraWindow = new BrowserWindow({
+      x: externalDisplay.bounds.x + 50,
+      y: externalDisplay.bounds.y + 50,
+      resizable: false,
+      movable: false,
+      alwaysOnTop: true,
+      fullscreen: true,
+      webPreferences: {
+        nodeIntegration: false
+      }
+    });
+
+    extraWindow.loadURL(
+      url.format({
+        pathname: path.join(__dirname, 'extraWindow.html'),
+        protocol: 'file:',
+        slashes: true
+      })
+    );
+    extraWindow.show();
+  }
 };
 
 /**
@@ -84,6 +117,29 @@ app.on('ready', async () => {
     }
     mainWindow.show();
     mainWindow.focus();
+  });
+
+  ipcMain.on('timer-ended', () => {
+    mainWindow.show();
+
+    blockExternalDisplays();
+  });
+
+  ipcMain.on('timer-started', () => {
+    setTimeout(function() {
+      if (mainWindow.isVisible()) {
+        mainWindow.minimize();
+      }
+
+      const windows = BrowserWindow.getAllWindows();
+      for (const window of windows) {
+        if (window === mainWindow) {
+          continue;
+        }
+
+        window.close();
+      }
+    }, 3000);
   });
 
   mainWindow.loadURL(`file://${__dirname}/app.html`);

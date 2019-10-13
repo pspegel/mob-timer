@@ -11,7 +11,7 @@ const Drivers: React.FunctionComponent<{}> = () => {
     e => dispatch(manualUpdateDrivers(e.target.value)),
     [dispatch]
   );
-  const copy = useCallback(e => dispatch(copyDriversToNavigators()), [
+  const copy = useCallback(() => dispatch(copyDriversToNavigators()), [
     dispatch
   ]);
   return (

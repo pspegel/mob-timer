@@ -5,7 +5,9 @@ import {
   map,
   takeWhile,
   endWith,
-  startWith
+  startWith,
+  tap,
+  finalize
 } from 'rxjs/operators';
 import { Epic } from 'redux-observable';
 import { isActionOf } from 'typesafe-actions';
@@ -17,11 +19,15 @@ import {
   secondsPerMinuteSelector,
   isValidSelector
 } from 'app/reducers/selectors';
+import { ipcRenderer } from 'electron';
 
 const epic: Epic<RootAction, RootAction, RootState, {}> = (action$, store$) =>
   action$.pipe(
     filter(isActionOf(timerStart)),
     filter(() => isValidSelector(store$.value)),
+    tap(() => {
+      ipcRenderer.send('timer-started');
+    }),
     exhaustMap(() => {
       const duration = durationSelector(store$.value);
       return interval(1000).pipe(
@@ -31,7 +37,10 @@ const epic: Epic<RootAction, RootAction, RootState, {}> = (action$, store$) =>
         ),
         takeWhile(({ payload: secondsLeft }) => secondsLeft >= 0),
         startWith(timerTick(duration * 1)),
-        endWith(timerEnded())
+        endWith(timerEnded()),
+        finalize(() => {
+          ipcRenderer.send('timer-ended');
+        })
       );
     })
   );

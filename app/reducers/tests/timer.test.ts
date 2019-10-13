@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import { fill } from 'lodash';
 
 import timer, { TimerState } from '../timer';
 import { timerTick, incrementDuration, decrementDuration } from 'app/actions';
@@ -56,10 +56,7 @@ describe('timer reducer', () => {
   });
 
   it('should not be possible to set a duration longer than one hour', () => {
-    const expected = _.fill(
-      Array(2),
-      expect.objectContaining({ duration: 60 })
-    );
+    const expected = fill(Array(2), expect.objectContaining({ duration: 60 }));
 
     const actual = [
       timer(
@@ -73,7 +70,7 @@ describe('timer reducer', () => {
   });
 
   it('should not be possible to set a duration shorter than one minute', () => {
-    const expected = _.fill(Array(2), expect.objectContaining({ duration: 1 }));
+    const expected = fill(Array(2), expect.objectContaining({ duration: 1 }));
 
     const actual = [
       timer(

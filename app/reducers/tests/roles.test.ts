@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import { dropRight } from 'lodash';
 
 import roles, { RolesState } from '../roles';
 import {
@@ -264,7 +264,7 @@ describe('roles reducer', () => {
     };
 
     const actual = roles(
-      { ...expected, navigators: _.dropRight(someNames) },
+      { ...expected, navigators: dropRight(someNames) },
       manualUpdateNavigators('Han Solo \n  C3PO\n\nJabba the Hutt')
     );
 
@@ -394,6 +394,27 @@ describe('roles reducer', () => {
     };
 
     const actual = roles(state, manualNextNavigator());
+
+    expect(actual).toMatchObject(expected);
+  });
+
+  it('should pick the next person in the the respective list when the round ends and the lists are equal', () => {
+    const expected: Partial<RolesState> = {
+      driver: someNames[1],
+      navigator: someNames[2],
+      isValid: true
+    };
+
+    const state: RolesState = {
+      drivers: someNames,
+      navigators: someNames,
+      driver: someNames[0],
+      navigator: someNames[1],
+      newline: false,
+      isValid: true
+    };
+
+    const actual = roles(state, timerEnded());
 
     expect(actual).toMatchObject(expected);
   });

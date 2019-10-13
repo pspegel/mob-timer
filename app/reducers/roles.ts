@@ -34,11 +34,24 @@ const initialState: RolesState = {
 const getNextExcept = (list: string[], current: string, except?: string) => {
   const allExcept = list.filter(x => x !== except);
 
-  const currentIndex = current ? allExcept.findIndex(x => x === current) : -1;
-
   const extendedList = [...allExcept, ...allExcept];
 
-  const next = extendedList[currentIndex + 1];
+  let next: string;
+  if (current) {
+    if (current === except) {
+      const currentIndex = list.findIndex(x => x === current);
+      if (currentIndex === -1) {
+        next = extendedList[0];
+      } else {
+        next = extendedList[currentIndex];
+      }
+    } else {
+      const currentIndex = allExcept.findIndex(x => x === current);
+      next = extendedList[currentIndex + 1];
+    }
+  } else {
+    next = extendedList[0];
+  }
 
   if (!next || next === current) {
     return null;

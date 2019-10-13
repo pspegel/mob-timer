@@ -16,7 +16,7 @@ export type TimerState = Readonly<{
 const DEFAULT_DURATION = 7;
 export const MAX_DURATION = 60;
 export const MIN_DURATION = 1;
-const SECONDS_PER_MINUTE = 1; // To make it easier to test.
+const SECONDS_PER_MINUTE = 60; // To make it easier to test.
 
 const initialState: TimerState = {
   duration: DEFAULT_DURATION,
