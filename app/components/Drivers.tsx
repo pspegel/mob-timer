@@ -2,7 +2,7 @@ import React, { useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
 import { driversAsTextSelector } from 'app/reducers/selectors';
-import { manualUpdateDrivers } from 'app/actions';
+import { manualUpdateDrivers, copyDriversToNavigators } from 'app/actions';
 
 const Drivers: React.FunctionComponent<{}> = () => {
   const roles = useSelector(driversAsTextSelector);
@@ -11,6 +11,9 @@ const Drivers: React.FunctionComponent<{}> = () => {
     e => dispatch(manualUpdateDrivers(e.target.value)),
     [dispatch]
   );
+  const copy = useCallback(e => dispatch(copyDriversToNavigators()), [
+    dispatch
+  ]);
   return (
     <>
       <div className="inner-wrap">
@@ -23,7 +26,9 @@ const Drivers: React.FunctionComponent<{}> = () => {
           onChange={updateDrivers}
         />
       </div>
-      <button type="button">Copy drivers to navigators</button>
+      <button type="button" onClick={copy}>
+        Copy drivers to navigators
+      </button>
     </>
   );
 };
