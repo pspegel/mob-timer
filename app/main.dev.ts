@@ -1,12 +1,4 @@
-/**
- * This module executes inside of electron's main process. You can start
- * electron renderer process from here and communicate with the other processes
- * through IPC.
- *
- * When running `yarn build` or `yarn build-main`, this file is compiled to
- * `./app/main.prod.js` using webpack. This gives us some performance wins.
- */
-import electron, { app, BrowserWindow, ipcMain, WebContents } from 'electron';
+import electron, { app, BrowserWindow, ipcMain } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
 import path from 'path';
@@ -20,7 +12,7 @@ export default class AppUpdater {
   }
 }
 
-let mainWindow = null;
+let mainWindow: BrowserWindow;
 
 if (process.env.NODE_ENV === 'production') {
   const sourceMapSupport = require('source-map-support');
@@ -44,11 +36,12 @@ const installExtensions = async () => {
   ).catch(console.log);
 };
 
+const getPrimaryDisplayId = () => electron.screen.getPrimaryDisplay().id;
+
 const blockExternalDisplays = () => {
   const displays = electron.screen.getAllDisplays();
-  const primaryDisplayId = electron.screen.getPrimaryDisplay().id;
   for (const i in displays) {
-    if (displays[i].id === primaryDisplayId) {
+    if (displays[i].id === getPrimaryDisplayId()) {
       continue;
     }
 
@@ -76,10 +69,6 @@ const blockExternalDisplays = () => {
   }
 };
 
-/**
- * Add event listeners...
- */
-
 app.on('window-all-closed', () => {
   // Respect the OSX convention of having the application in memory even
   // after all windows have been closed
@@ -99,34 +88,37 @@ app.on('ready', async () => {
   mainWindow = new BrowserWindow({
     icon: path.join(__dirname, '../favicon.ico'),
     show: false,
-    resizable: false,
-    movable: false,
-    alwaysOnTop: true,
-    fullscreen: true,
     webPreferences: {
       nodeIntegration: true
-    }
+    },
+    autoHideMenuBar: true
   });
-
-  const webContents: WebContents = mainWindow.webContents;
-  webContents.openDevTools({ mode: 'right' });
 
   ipcMain.once('react-app-loaded', () => {
     if (!mainWindow) {
       throw new Error('"mainWindow" is not defined');
     }
-    mainWindow.show();
+
+    // Let the user move around the window until the rounds have started.
+    mainWindow.maximize();
     mainWindow.focus();
   });
 
   ipcMain.on('timer-ended', () => {
-    mainWindow.show();
+    mainWindow.maximize();
+    mainWindow.setFullScreen(true);
+    mainWindow.setAlwaysOnTop(true);
+    mainWindow.focus();
 
     blockExternalDisplays();
   });
 
   ipcMain.on('timer-started', () => {
     setTimeout(function() {
+      // Must be set before minimizing otherwise the window will show up again.
+      mainWindow.setAlwaysOnTop(false);
+      mainWindow.setFullScreen(false);
+
       if (mainWindow.isVisible()) {
         mainWindow.minimize();
       }
@@ -145,7 +137,7 @@ app.on('ready', async () => {
   mainWindow.loadURL(`file://${__dirname}/app.html`);
 
   mainWindow.on('closed', () => {
-    mainWindow = null;
+    mainWindow = undefined;
   });
 
   // Remove this if your app does not use auto updates
