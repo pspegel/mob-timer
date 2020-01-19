@@ -36,7 +36,7 @@ const epic: Epic<RootAction, RootAction, RootState, {}> = (action$, store$) =>
           timerTick(duration * secondsPerMinuteSelector(store$.value) - seconds)
         ),
         takeWhile(({ payload: secondsLeft }) => secondsLeft >= 0),
-        startWith(timerTick(duration * 1)),
+        startWith(timerTick(duration * secondsPerMinuteSelector(store$.value))),
         endWith(timerEnded()),
         finalize(() => {
           ipcRenderer.send('timer-ended');

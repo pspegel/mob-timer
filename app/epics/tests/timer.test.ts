@@ -7,8 +7,6 @@ import { TimerState } from 'app/reducers/timer';
 
 jest.mock('electron');
 
-const secondsPerMinute = 1; // To reduce the number of emitted actions in the test
-
 describe('timer epic', () => {
   it('should emit a tick every second and end with a timer ended action', () => {
     const testScheduler = new TestScheduler((actual, expected) => {
@@ -25,7 +23,7 @@ describe('timer epic', () => {
 
       const timerState: Partial<TimerState> = {
         duration: 2,
-        secondsPerMinute
+        secondsPerMinute: 2
       };
 
       const store$ = {
@@ -39,12 +37,17 @@ describe('timer epic', () => {
 
       const output$ = timer(action$ as any, store$, null);
 
-      expectObservable(output$).toBe('a 999ms b 999ms c 999ms e', {
-        a: timerTick(2),
-        b: timerTick(1),
-        c: timerTick(0),
-        e: timerEnded()
-      });
+      expectObservable(output$).toBe(
+        's 999ms a 999ms b 999ms c 999ms d 999ms e',
+        {
+          s: timerTick(4),
+          a: timerTick(3),
+          b: timerTick(2),
+          c: timerTick(1),
+          d: timerTick(0),
+          e: timerEnded()
+        }
+      );
     });
   });
 
@@ -60,7 +63,7 @@ describe('timer epic', () => {
 
       const timerState: Partial<TimerState> = {
         duration: 2,
-        secondsPerMinute
+        secondsPerMinute: 1
       };
 
       const store$ = {
