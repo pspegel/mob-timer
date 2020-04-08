@@ -1,12 +1,17 @@
 import { applyMiddleware, createStore, Store } from 'redux';
 import { composeWithDevTools } from 'redux-devtools-extension';
+import { createHashHistory } from 'history';
 
-import { rootReducer, RootState } from '../reducers';
+import createRootReducer, { RootState } from '../reducers';
 
-const configureStore = (initialState?: RootState): Store<RootState | undefined> => {
+export const history = createHashHistory();
+
+const rootReducer = createRootReducer(history);
+
+const configureStore = (): Store<RootState | undefined> => {
     const middlewares: any[] = [];
     const enhancer = composeWithDevTools(applyMiddleware(...middlewares));
-    return createStore(rootReducer, initialState, enhancer);
+    return createStore(rootReducer, {}, enhancer);
 };
 
 const store = configureStore();

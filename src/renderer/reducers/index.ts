@@ -1,11 +1,19 @@
 import { combineReducers } from 'redux';
+import { connectRouter } from 'connected-react-router';
+import { History } from 'history';
 
-import { CounterState, counterReducer } from './counterReducer';
+import roles, { RolesState } from './roles';
+import timer, { TimerState } from './timer';
 
-export interface RootState {
-    counter: CounterState;
-}
+export type RootState = Readonly<{
+    router: any;
+    roles: RolesState;
+    timer: TimerState;
+}>;
 
-export const rootReducer = combineReducers<RootState | undefined>({
-    counter: counterReducer
-});
+export default (history: History) =>
+    combineReducers({
+        router: connectRouter(history),
+        roles,
+        timer
+    });

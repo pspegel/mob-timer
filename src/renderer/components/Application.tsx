@@ -1,13 +1,17 @@
-import { hot } from 'react-hot-loader/root';
 import * as React from 'react';
+import { hot } from 'react-hot-loader/root';
+import { ConnectedRouter } from 'connected-react-router';
+import { Switch, Route } from 'react-router';
 
-import CounterContainer from '../containers/CounterContainer';
+import { history } from '../store';
+import Settings from './Settings';
 
-const Application = () => (
-    <div>
-        Hello World from Electron!
-        <CounterContainer />
-    </div>
+const Application: React.FunctionComponent<{}> = () => (
+    <ConnectedRouter history={history}>
+        <Switch>
+            <Route path="/" component={Settings} />
+        </Switch>
+    </ConnectedRouter>
 );
 
 export default hot(Application);
