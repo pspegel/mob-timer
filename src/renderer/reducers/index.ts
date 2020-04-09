@@ -6,14 +6,14 @@ import roles, { RolesState } from './roles';
 import timer, { TimerState } from './timer';
 
 export type RootState = Readonly<{
-    router: any;
-    roles: RolesState;
-    timer: TimerState;
+  router: any;
+  roles: RolesState;
+  timer: TimerState;
 }>;
 
 export default (history: History) =>
-    combineReducers({
-        router: connectRouter(history),
-        roles,
-        timer
-    });
+  combineReducers({
+    router: connectRouter(history),
+    roles,
+    timer
+  });

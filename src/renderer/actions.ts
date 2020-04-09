@@ -8,30 +8,24 @@ export const extendDuration = createStandardAction('mob-timer/EXTEND_DURATION')<
 
 export const manualNextDriver = createStandardAction('mob-timer/MANUAL_NEXT_DRIVER')<void>();
 export const manualNextNavigator = createStandardAction('mob-timer/MANUAL_NEXT_NAVIGATOR')<void>();
-export const manualSwitchDriverAndNavigator = createStandardAction(
-    'mob-timer/MANUAL_SWITCH_DRIVER_AND_NAVIGATOR'
-)<void>();
-
-export const copyDriversToNavigators = createStandardAction('mob-timer/COPY_DRIVERS_TO_NAVIGATORS')<
-    void
+export const manualSwitchDriverAndNavigator = createStandardAction('mob-timer/MANUAL_SWITCH_DRIVER_AND_NAVIGATOR')<
+  void
 >();
 
-export const manualUpdateDrivers = createStandardAction('mob-timer/MANUAL_UPDATE_DRIVERS')<
-    string
->();
+export const copyDriversToNavigators = createStandardAction('mob-timer/COPY_DRIVERS_TO_NAVIGATORS')<void>();
 
-export const manualUpdateNavigators = createStandardAction('mob-timer/MANUAL_UPDATE_NAVIGATORS')<
-    string
->();
+export const manualUpdateDrivers = createStandardAction('mob-timer/MANUAL_UPDATE_DRIVERS')<string>();
+
+export const manualUpdateNavigators = createStandardAction('mob-timer/MANUAL_UPDATE_NAVIGATORS')<string>();
 
 export type RoleAction = ActionType<
-    | typeof manualNextDriver
-    | typeof manualNextNavigator
-    | typeof manualSwitchDriverAndNavigator
-    | typeof copyDriversToNavigators
-    | typeof manualUpdateDrivers
-    | typeof manualUpdateNavigators
-    | typeof timerEnded
+  | typeof manualNextDriver
+  | typeof manualNextNavigator
+  | typeof manualSwitchDriverAndNavigator
+  | typeof copyDriversToNavigators
+  | typeof manualUpdateDrivers
+  | typeof manualUpdateNavigators
+  | typeof timerEnded
 >;
 
 export type ManualUpdateDriversAction = ActionType<typeof manualUpdateDrivers>;
@@ -44,9 +38,5 @@ export const timerTick = createStandardAction('mob-timer/TIMER_TICK')<number>();
 export const timerEnded = createStandardAction('mob-timer/TIMER_ENDED')<void>();
 
 export type TimerAction = ActionType<
-    | typeof incrementDuration
-    | typeof decrementDuration
-    | typeof timerStart
-    | typeof timerTick
-    | typeof timerEnded
+  typeof incrementDuration | typeof decrementDuration | typeof timerStart | typeof timerTick | typeof timerEnded
 >;

@@ -11,10 +11,10 @@ const mainElement = document.createElement('div');
 document.body.appendChild(mainElement);
 
 ReactDOM.render(
-    <AppContainer>
-        <Provider store={store}>
-            <Application />
-        </Provider>
-    </AppContainer>,
-    mainElement
+  <AppContainer>
+    <Provider store={store}>
+      <Application />
+    </Provider>
+  </AppContainer>,
+  mainElement
 );

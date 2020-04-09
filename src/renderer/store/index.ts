@@ -9,17 +9,15 @@ export const history = createHashHistory();
 const rootReducer = createRootReducer(history);
 
 const configureStore = (): Store<RootState | undefined> => {
-    const middlewares: any[] = [];
-    const enhancer = composeWithDevTools(applyMiddleware(...middlewares));
-    return createStore(rootReducer, {}, enhancer);
+  const middlewares: any[] = [];
+  const enhancer = composeWithDevTools(applyMiddleware(...middlewares));
+  return createStore(rootReducer, {}, enhancer);
 };
 
 const store = configureStore();
 
 if (typeof module.hot !== 'undefined') {
-    module.hot.accept('../reducers', () =>
-        store.replaceReducer(require('../reducers').rootReducer)
-    );
+  module.hot.accept('../reducers', () => store.replaceReducer(require('../reducers').rootReducer));
 }
 
 export default store;

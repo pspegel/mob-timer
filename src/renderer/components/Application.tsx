@@ -7,11 +7,11 @@ import { history } from '../store';
 import Settings from './Settings';
 
 const Application: React.FunctionComponent<{}> = () => (
-    <ConnectedRouter history={history}>
-        <Switch>
-            <Route path="/" component={Settings} />
-        </Switch>
-    </ConnectedRouter>
+  <ConnectedRouter history={history}>
+    <Switch>
+      <Route path="/" component={Settings} />
+    </Switch>
+  </ConnectedRouter>
 );
 
 export default hot(Application);

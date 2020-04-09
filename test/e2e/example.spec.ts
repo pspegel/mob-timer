@@ -5,29 +5,29 @@ import * as path from 'path';
 jest.setTimeout(10000);
 
 describe('Main window', () => {
-    let app: Application;
+  let app: Application;
 
-    beforeEach(() => {
-        app = new Application({
-            path: electronPath.toString(),
-            args: [path.join(__dirname, '..', '..')]
-        });
-
-        return app.start();
+  beforeEach(() => {
+    app = new Application({
+      path: electronPath.toString(),
+      args: [path.join(__dirname, '..', '..')]
     });
 
-    afterEach(() => {
-        if (app.isRunning()) {
-            return app.stop();
-        }
-    });
+    return app.start();
+  });
 
-    it('opens the window', async () => {
-        const { client, browserWindow } = app;
+  afterEach(() => {
+    if (app.isRunning()) {
+      return app.stop();
+    }
+  });
 
-        await client.waitUntilWindowLoaded();
-        const title = await browserWindow.getTitle();
+  it('opens the window', async () => {
+    const { client, browserWindow } = app;
 
-        expect(title).toBe('Mob timer');
-    });
+    await client.waitUntilWindowLoaded();
+    const title = await browserWindow.getTitle();
+
+    expect(title).toBe('Mob timer');
+  });
 });
