@@ -52,7 +52,7 @@
     }
   },
   "build": {
-    "productName": "mob-timer",
+    "productName": "Mob timer",
     "appId": "spegel.peter.mobtimer",
     "mac": {
       "category": "your.app.category.type"
