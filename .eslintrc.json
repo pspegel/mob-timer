@@ -97,6 +97,7 @@
         "@typescript-eslint/no-explicit-any": 0,
         "@typescript-eslint/explicit-member-accessibility": 0,
         "@typescript-eslint/no-angle-bracket-type-assertion": 0,
+        "consistent-return": 0,
         "no-plusplus": 0
     }
 }
