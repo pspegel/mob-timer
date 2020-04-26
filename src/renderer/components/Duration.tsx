@@ -14,7 +14,7 @@ const Duration: React.FunctionComponent<{}> = () => {
     <>
       <h2>Duration</h2>
       <div className="form-group">
-        <input type="text" value={duration} />
+        <input type="text" value={duration} readOnly={true} />
         <button type="button" onClick={decrement} disabled={duration <= MIN_DURATION}>
           -
         </button>

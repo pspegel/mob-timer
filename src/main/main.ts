@@ -28,8 +28,8 @@ const blockExternalDisplays = () => {
       y: externalDisplay.bounds.y + 50,
       resizable: false,
       movable: false,
-      alwaysOnTop: true,
-      fullscreen: true,
+      alwaysOnTop: false,
+      fullscreen: false,
       webPreferences: {
         nodeIntegration: false
       }
@@ -42,7 +42,7 @@ const blockExternalDisplays = () => {
         slashes: true
       })
     );
-    extraWindow.show();
+    extraWindow.maximize();
   }
 };
 
@@ -65,8 +65,6 @@ const createWindow = async () => {
 
   ipcMain.on('timer-ended', () => {
     mainWindow.maximize();
-    mainWindow.setFullScreen(true);
-    mainWindow.setAlwaysOnTop(true);
     mainWindow.focus();
 
     blockExternalDisplays();
@@ -74,10 +72,6 @@ const createWindow = async () => {
 
   ipcMain.on('timer-started', () => {
     setTimeout(function() {
-      // Must be set before minimizing otherwise the window will show up again.
-      mainWindow.setAlwaysOnTop(false);
-      mainWindow.setFullScreen(false);
-
       if (mainWindow.isVisible()) {
         mainWindow.minimize();
       }
