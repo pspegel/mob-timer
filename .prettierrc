@@ -1,13 +1,6 @@
 {
-  "overrides": [
-    {
-      "files": [".prettierrc", ".babelrc", ".stylelintrc"],
-      "options": {
-        "parser": "json",
-        "printWidth": 120,
-        "arrowParens": "always"
-      }
-    }
-  ],
-  "singleQuote": true
+  "singleQuote": true,
+  "printWidth": 120,
+  "arrowParens": "always",
+  "tabWidth": 2
 }
