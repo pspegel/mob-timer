@@ -37,7 +37,7 @@ const blockExternalDisplays = () => {
 
     extraWindow.loadURL(
       url.format({
-        pathname: path.join(__dirname, 'extraWindow.html'), // TODO: Fix path
+        pathname: path.join(__dirname, '../extraWindow.html'),
         protocol: 'file:',
         slashes: true
       })
@@ -53,7 +53,6 @@ const createWindow = async () => {
 
   mainWindow = new BrowserWindow({
     title: 'Mob timer',
-    icon: path.join(__dirname, 'favicon.ico'), // TODO: Fix path
     autoHideMenuBar: true,
     webPreferences: { nodeIntegration: true },
     show: false
@@ -66,6 +65,11 @@ const createWindow = async () => {
   ipcMain.on('timer-ended', () => {
     mainWindow.maximize();
     mainWindow.focus();
+    mainWindow.setAlwaysOnTop(true);
+
+    setTimeout(() => {
+      mainWindow.setAlwaysOnTop(false);
+    }, 3000);
 
     blockExternalDisplays();
   });

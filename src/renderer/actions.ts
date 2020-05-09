@@ -25,7 +25,9 @@ export type RoleAction = ActionType<
   | typeof copyDriversToNavigators
   | typeof manualUpdateDrivers
   | typeof manualUpdateNavigators
+  | typeof timerStart
   | typeof timerEnded
+  | typeof enableButton
 >;
 
 export type ManualUpdateDriversAction = ActionType<typeof manualUpdateDrivers>;
@@ -36,6 +38,7 @@ export const decrementDuration = createStandardAction('mob-timer/DECREMENT_DURAT
 export const timerStart = createStandardAction('mob-timer/TIMER_START')<void>();
 export const timerTick = createStandardAction('mob-timer/TIMER_TICK')<number>();
 export const timerEnded = createStandardAction('mob-timer/TIMER_ENDED')<void>();
+export const enableButton = createStandardAction('mob-timer/ENABLE_BUTTON')<void>();
 
 export type TimerAction = ActionType<
   typeof incrementDuration | typeof decrementDuration | typeof timerStart | typeof timerTick | typeof timerEnded

@@ -22,7 +22,8 @@ describe('roles reducer', () => {
       driver: null,
       navigator: null,
       newline: false,
-      isValid: false
+      isValid: false,
+      isButtonEnabled: true
     };
 
     const actual = roles(undefined, { type: '' } as any);
@@ -37,7 +38,8 @@ describe('roles reducer', () => {
       driver: 'Han Solo',
       navigator: 'C3PO',
       newline: false,
-      isValid: true
+      isValid: true,
+      isButtonEnabled: true
     };
 
     const actual = roles({ ...expected, navigators: [], navigator: null }, copyDriversToNavigators());
@@ -56,7 +58,8 @@ describe('roles reducer', () => {
           driver: 'Han Solo',
           navigator: 'C3PO',
           newline: false,
-          isValid: true
+          isValid: true,
+          isButtonEnabled: true
         },
         manualNextDriver()
       )
@@ -87,7 +90,8 @@ describe('roles reducer', () => {
       navigators: ['Han Solo', 'R2D2'],
       navigator: 'R2D2',
       newline: false,
-      isValid: true
+      isValid: true,
+      isButtonEnabled: true
     };
 
     const actual = roles(expected, manualNextDriver());
@@ -106,7 +110,8 @@ describe('roles reducer', () => {
           driver: 'Han Solo',
           navigator: 'C3PO',
           newline: false,
-          isValid: true
+          isValid: true,
+          isButtonEnabled: true
         },
         manualNextNavigator()
       )
@@ -138,7 +143,8 @@ describe('roles reducer', () => {
       navigators: ['Han Solo', 'R2D2'],
       navigator: 'R2D2',
       newline: false,
-      isValid: true
+      isValid: true,
+      isButtonEnabled: true
     };
 
     const actual = roles(expected, manualNextNavigator());
@@ -159,7 +165,8 @@ describe('roles reducer', () => {
         driver: 'C3PO',
         navigator: 'Han Solo',
         newline: false,
-        isValid: true
+        isValid: true,
+        isButtonEnabled: true
       },
       manualSwitchDriverAndNavigator()
     );
@@ -174,7 +181,8 @@ describe('roles reducer', () => {
       driver: 'C3PO',
       navigator: 'Han Solo',
       newline: false,
-      isValid: false
+      isValid: false,
+      isButtonEnabled: true
     };
 
     const actual = roles(expected, manualSwitchDriverAndNavigator());
@@ -189,7 +197,8 @@ describe('roles reducer', () => {
       driver: 'C3PO',
       navigator: 'Han Solo',
       newline: false,
-      isValid: true
+      isValid: true,
+      isButtonEnabled: true
     };
 
     const actual = roles(expected, manualSwitchDriverAndNavigator());
@@ -204,7 +213,8 @@ describe('roles reducer', () => {
       driver: 'Han Solo',
       navigator: null,
       newline: true,
-      isValid: false
+      isValid: false,
+      isButtonEnabled: true
     };
 
     const actual = roles(undefined, manualUpdateDrivers('\nHan Solo\n'));
@@ -221,7 +231,8 @@ describe('roles reducer', () => {
         driver: 'Han Sol',
         navigator,
         newline: false,
-        isValid: true
+        isValid: true,
+        isButtonEnabled: true
       },
       {
         drivers: ['Han Solo'],
@@ -229,7 +240,8 @@ describe('roles reducer', () => {
         driver: null,
         navigator,
         newline: false,
-        isValid: false
+        isValid: false,
+        isButtonEnabled: true
       },
       {
         drivers: ['Han Solomon'],
@@ -237,7 +249,8 @@ describe('roles reducer', () => {
         driver: 'Han Solomon',
         navigator,
         newline: true,
-        isValid: true
+        isValid: true,
+        isButtonEnabled: true
       }
     ];
 
@@ -255,7 +268,8 @@ describe('roles reducer', () => {
       driver: null,
       navigator: 'C3PO',
       newline: false,
-      isValid: false
+      isValid: false,
+      isButtonEnabled: true
     };
 
     const actual = roles(
@@ -274,7 +288,8 @@ describe('roles reducer', () => {
         navigators: [],
         navigator: null,
         newline: false,
-        isValid: false
+        isValid: false,
+        isButtonEnabled: true
       },
       manualUpdateDrivers(' Han Solo\n\nC3\nJabba the Hutt')
     );
@@ -290,7 +305,8 @@ describe('roles reducer', () => {
         navigators: someNames,
         navigator: 'Jabba the Hutt',
         newline: true,
-        isValid: false
+        isValid: false,
+        isButtonEnabled: true
       },
       manualUpdateNavigators('Han Solo\n\nC3PO\nJabba the Hu\n')
     );
@@ -312,7 +328,8 @@ describe('roles reducer', () => {
       driver: 'Jango Fett',
       navigator: 'Boba Fett',
       newline: false,
-      isValid: true
+      isValid: true,
+      isButtonEnabled: true
     };
 
     const actual = callReducerRecursively(roles, state, timerEnded(), expected.length);
@@ -333,7 +350,8 @@ describe('roles reducer', () => {
       driver: 'Jango Fett',
       navigator: 'Boba Fett',
       newline: false,
-      isValid: true
+      isValid: true,
+      isButtonEnabled: true
     };
 
     const actual = callReducerRecursively(roles, state, timerEnded(), expected.length);
@@ -354,7 +372,8 @@ describe('roles reducer', () => {
       driver: 'Jango Fett',
       navigator: 'Amidala',
       newline: false,
-      isValid: true
+      isValid: true,
+      isButtonEnabled: true
     };
 
     const actual = roles(state, timerEnded());
@@ -375,7 +394,8 @@ describe('roles reducer', () => {
       driver: 'Stormtrooper',
       navigator: null,
       newline: false,
-      isValid: false
+      isValid: false,
+      isButtonEnabled: true
     };
 
     const actual = roles(state, manualNextNavigator());
@@ -396,7 +416,8 @@ describe('roles reducer', () => {
       driver: someNames[0],
       navigator: someNames[1],
       newline: false,
-      isValid: true
+      isValid: true,
+      isButtonEnabled: true
     };
 
     const actual = roles(state, timerEnded());

@@ -11,7 +11,9 @@ import {
   manualUpdateNavigators,
   ManualUpdateDriversAction,
   ManualUpdateNavigatorsAction,
-  timerEnded
+  timerEnded,
+  enableButton,
+  timerStart
 } from '../actions';
 
 export type RolesState = Readonly<{
@@ -21,6 +23,7 @@ export type RolesState = Readonly<{
   navigator: string;
   newline: boolean;
   isValid: boolean;
+  isButtonEnabled: boolean;
 }>;
 
 const initialState: RolesState = {
@@ -29,7 +32,8 @@ const initialState: RolesState = {
   driver: null,
   navigator: null,
   newline: false,
-  isValid: false
+  isValid: false,
+  isButtonEnabled: true
 };
 
 const getNextExcept = (list: string[], current: string, except?: string) => {
@@ -202,6 +206,18 @@ const innerReducer = (state: RolesState, action: RoleAction) => {
 
     case getType(timerEnded):
       return handleTimerEnded(state);
+
+    case getType(timerStart):
+      return {
+        ...state,
+        isButtonEnabled: false
+      };
+
+    case getType(enableButton):
+      return {
+        ...state,
+        isButtonEnabled: true
+      };
 
     default:
       return state;

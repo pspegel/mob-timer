@@ -39,4 +39,4 @@ export const timeSelector = createSelector<RootState, number, string>(
 
 export const secondsPerMinuteSelector = (state: RootState) => state.timer.secondsPerMinute; // For test
 
-export const isValidSelector = (state: RootState) => state.roles.isValid;
+export const isValidSelector = (state: RootState) => state.roles.isValid && state.roles.isButtonEnabled;

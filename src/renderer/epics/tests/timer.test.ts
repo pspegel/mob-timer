@@ -5,7 +5,11 @@ import timer from '../timer';
 import { timerStart, timerTick, timerEnded } from '../../actions';
 import { TimerState } from '../../reducers/timer';
 
-jest.mock('electron');
+jest.mock('electron', () => ({
+  ipcRenderer: {
+    send: jest.fn()
+  }
+}));
 
 describe('timer epic', () => {
   it('should emit a tick every second and end with a timer ended action', () => {
@@ -26,7 +30,7 @@ describe('timer epic', () => {
         secondsPerMinute: 2
       };
 
-      const store$ = {
+      const state$ = {
         value: {
           timer: timerState,
           roles: {
@@ -35,7 +39,7 @@ describe('timer epic', () => {
         }
       } as any;
 
-      const output$ = timer(action$ as any, store$, null);
+      const output$ = timer(action$ as any, state$, null);
 
       expectObservable(output$).toBe('s 999ms a 999ms b 999ms c 999ms d 999ms e', {
         s: timerTick(4),
@@ -45,36 +49,6 @@ describe('timer epic', () => {
         d: timerTick(0),
         e: timerEnded()
       });
-    });
-  });
-
-  it('should do nothing when the roles are invalid', () => {
-    const testScheduler = new TestScheduler((actual, expected) => {
-      expect(actual).toEqual(expected);
-    });
-
-    testScheduler.run(({ hot, expectObservable }) => {
-      const action$ = hot('s', {
-        s: timerStart()
-      });
-
-      const timerState: Partial<TimerState> = {
-        duration: 2,
-        secondsPerMinute: 1
-      };
-
-      const store$ = {
-        value: {
-          timer: timerState,
-          roles: {
-            isValid: false
-          }
-        }
-      } as any;
-
-      const output$ = timer(action$ as any, store$, null);
-
-      expectObservable(output$).toBe('');
     });
   });
 });
